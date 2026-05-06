@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ZWISCHENWELTEN – Interkulturelles und mehrsprachiges Journalistennetzwerk</title>
+  <meta name="description" content="ZWISCHENWELTEN ist ein interkulturelles Kultur-, Medien- und Bildungsprojekt in Berlin. Das Journalistennetzwerk stärkt Dialog, Mehrsprachigkeit und demokratische Öffentlichkeit.">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#b76643">
+  <meta name="color-scheme" content="light">
+
+  <link rel="canonical" href="https://www.example.org/">
+  <link rel="icon" href="/favicon.ico">
+
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:site_name" content="ZWISCHENWELTEN">
+  <meta property="og:title" content="ZWISCHENWELTEN – Interkulturelles und mehrsprachiges Journalistennetzwerk">
+  <meta property="og:description" content="Ein Berliner Projekt an der Schnittstelle von Journalismus, Zivilgesellschaft und kultureller Bildung.">
+  <meta property="og:url" content="https://www.example.org/">
+  <meta property="og:image" content="https://www.example.org/assets/og-image.jpg">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ZWISCHENWELTEN – Interkulturelles und mehrsprachiges Journalistennetzwerk">
+  <meta name="twitter:description" content="Journalismus, Dialog und Teilhabe für eine postmigrantische Stadtgesellschaft in Berlin.">
+  <meta name="twitter:image" content="https://www.example.org/assets/og-image.jpg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #f4efe7;
+      --paper: #f8f4ed;
+      --surface: #fbf8f3;
+      --line: #ddd1c2;
+      --text: #1f1a17;
+      --muted: #665c54;
+      --accent: #b76643;
+      --accent-dark: #964f31;
+      --secondary: #315a5a;
+      --max: 1240px;
+      --radius: 22px;
+      --shadow: 0 12px 30px rgba(31,26,23,0.06);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body{
+      margin:0;
+      font-family:"Inter",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(183,102,67,.06), transparent 30%),
+        linear-gradient(180deg, #f6f1ea 0%, #f2ece4 100%);
+      line-height:1.65;
+    }
+
+    img{ max-width:100%; display:block; }
+    a{ color:inherit; text-decoration:none; }
+    .container{ width:min(calc(100% - 2rem), var(--max)); margin-inline:auto; }
+
+    .skip-link{
+      position:absolute;
+      left:-9999px;
+      top:auto;
+    }
+    .skip-link:focus{
+      left:1rem;
+      top:1rem;
+      z-index:999;
+      background:#000;
+      color:#fff;
+      padding:.8rem 1rem;
+      border-radius:10px;
+    }
+
+    .topbar{
+      border-bottom:1px solid rgba(31,26,23,.08);
+      font-size:.92rem;
+      color:var(--muted);
+      background:rgba(248,244,237,.7);
+    }
+    .topbar-inner{
+      min-height:42px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+    }
+    .topbar small{
+      display:flex;
+      gap:1.2rem;
+      flex-wrap:wrap;
+    }
+
+    .site-header{
+      position:sticky;
+      top:0;
+      z-index:20;
+      backdrop-filter: blur(12px);
+      background:rgba(244,239,231,.86);
+      border-bottom:1px solid rgba(31,26,23,.08);
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+      min-height:84px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:.9rem;
+      min-width:0;
+    }
+    .brand-mark{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      background:
+        radial-gradient(circle at 30% 35%, #efd0bc 0 24%, transparent 25%),
+        radial-gradient(circle at 68% 68%, #cf8660 0 22%, transparent 23%),
+        linear-gradient(135deg, var(--secondary), var(--accent));
+      box-shadow:var(--shadow);
+      flex:0 0 auto;
+    }
+    .brand-text{
+      display:flex;
+      flex-direction:column;
+      line-height:1.05;
+    }
+    .brand-text strong{
+      font-size:1rem;
+      letter-spacing:.08em;
+      font-weight:800;
+    }
+    .brand-text span{
+      font-size:.82rem;
+      color:var(--muted);
+    }
+
+    nav ul{
+      list-style:none;
+      display:flex;
+      align-items:center;
+      gap:1.4rem;
+      margin:0;
+      padding:0;
+    }
+    nav a{
+      color:var(--muted);
+      font-weight:600;
+      font-size:.97rem;
+    }
+    nav a:hover,
+    nav a:focus{
+      color:var(--text);
+    }
+
+    .lang-switch{
+      display:flex;
+      align-items:center;
+      gap:.65rem;
+    }
+    .lang-switch a{
+      font-size:.9rem;
+      color:var(--muted);
+    }
+    .lang-switch a[aria-current="true"]{
+      color:var(--text);
+      font-weight:700;
+    }
+
+    .hero{
+      padding:4rem 0 2rem;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.12fr .88fr;
+      gap:2rem;
+      align-items:end;
+    }
+
+    .eyebrow{
+      display:inline-block;
+      margin-bottom:1rem;
+      padding:.45rem .8rem;
+      border:1px solid rgba(183,102,67,.18);
+      border-radius:999px;
+      color:var(--accent-dark);
+      background:rgba(183,102,67,.07);
+      font-size:.9rem;
+      font-weight:700;
+      letter-spacing:.01em;
+    }
+
+    h1, h2, h3{
+      font-family:"Cormorant Garamond", Georgia, serif;
+      line-height:1;
+      letter-spacing:-.02em;
+      margin:0;
+    }
+
+    h1{
+      font-size:clamp(3rem, 6vw, 5.5rem);
+      margin-bottom:1rem;
+      max-width:10ch;
+    }
+
+    .hero-intro{
+      font-size:1.08rem;
+      color:var(--muted);
+      max-width:60ch;
+      margin:0 0 1.6rem;
+    }
+
+    .hero-actions{
+      display:flex;
+      gap:.9rem;
+      flex-wrap:wrap;
+      margin-top:1.4rem;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:.5rem;
+      min-height:48px;
+      padding:.85rem 1.15rem;
+      border-radius:999px;
+      font-weight:700;
+      border:1px solid transparent;
+      transition:.2s ease;
+    }
+    .btn-primary{
+      background:var(--accent);
+      color:#fff;
+    }
+    .btn-primary:hover,
+    .btn-primary:focus{
+      background:var(--accent-dark);
+    }
+    .btn-secondary{
+      background:transparent;
+      border-color:var(--line);
+      color:var(--text);
+    }
+
+    .hero-side{
+      border-top:1px solid var(--line);
+      padding-top:1.1rem;
+    }
+    .hero-side .label{
+      font-size:.82rem;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      color:var(--muted);
+      margin-bottom:.8rem;
+    }
+    .hero-side p{
+      margin:0 0 1rem;
+      font-size:1.02rem;
+      color:var(--text);
+      max-width:34ch;
+    }
+
+    .meta-row{
+      display:grid;
+      grid-template-columns:repeat(2, 1fr);
+      gap:1rem;
+      margin-top:1.2rem;
+    }
+
+    .meta-box{
+      padding:1rem 0 0;
+      border-top:1px solid var(--line);
+    }
+    .meta-box strong{
+      display:block;
+      margin-bottom:.35rem;
+      font-size:.95rem;
+    }
+    .meta-box span{
+      color:var(--muted);
+      font-size:.95rem;
+    }
+
+    .divider{
+      border:none;
+      border-top:1px solid rgba(31,26,23,.1);
+      margin:2.25rem 0 0;
+    }
+
+    section{
+      padding:2.5rem 0;
+    }
+
+    .section-grid{
+      display:grid;
+      grid-template-columns: 280px 1fr;
+      gap:2rem;
+      align-items:start;
+    }
+
+    .section-title small{
+      display:block;
+      font-size:.82rem;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      color:var(--muted);
+      margin-bottom:.8rem;
+      font-family:"Inter", sans-serif;
+    }
+    .section-title h2{
+      font-size:clamp(2rem, 3vw, 3.2rem);
+    }
+
+    .section-body > p:first-child{
+      margin-top:0;
+    }
+
+    .lead-block{
+      background:rgba(255,255,255,.35);
+      border:1px solid rgba(221,209,194,.8);
+      border-radius:28px;
+      padding:1.4rem;
+      box-shadow:var(--shadow);
+    }
+
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:1rem;
+      margin-top:1.3rem;
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:repeat(2, 1fr);
+      gap:1rem;
+      margin-top:1.2rem;
+    }
+
+    .panel{
+      background:rgba(255,255,255,.38);
+      border:1px solid rgba(221,209,194,.9);
+      border-radius:20px;
+      padding:1.25rem;
+    }
+
+    .panel h3{
+      font-size:1.5rem;
+      margin-bottom:.55rem;
+    }
+
+    .panel p{
+      margin:0;
+      color:var(--muted);
+    }
+
+    .philosophy-quote{
+      font-family:"Cormorant Garamond", Georgia, serif;
+      font-size:clamp(1.8rem, 2.7vw, 2.8rem);
+      line-height:1.08;
+      margin:0 0 1rem;
+      max-width:18ch;
+    }
+
+    .statements{
+      list-style:none;
+      padding:0;
+      margin:1rem 0 0;
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:.8rem 1rem;
+    }
+    .statements li{
+      padding-top:.8rem;
+      border-top:1px solid var(--line);
+      color:var(--muted);
+    }
+
+    .partners{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:.8rem;
+      margin-top:1rem;
+    }
+    .partner{
+      background:rgba(255,255,255,.4);
+      border:1px solid rgba(221,209,194,.9);
+      border-radius:16px;
+      padding:1rem;
+      min-height:92px;
+      display:flex;
+      align-items:flex-start;
+      font-weight:600;
+    }
+
+    .cta-block{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:1rem;
+      align-items:center;
+      padding:1.6rem;
+      border-radius:28px;
+      background:linear-gradient(135deg, rgba(183,102,67,.08), rgba(49,90,90,.08));
+      border:1px solid var(--line);
+    }
+
+    footer{
+      padding:2.5rem 0 4rem;
+      border-top:1px solid rgba(31,26,23,.08);
+    }
+
+    .footer-grid{
+      display:grid;
+      grid-template-columns:1.2fr .9fr .9fr;
+      gap:1.2rem;
+    }
+
+    .footer-title{
+      font-weight:800;
+      margin-bottom:.7rem;
+      letter-spacing:.03em;
+    }
+
+    .footer-list{
+      list-style:none;
+      margin:0;
+      padding:0;
+    }
+    .footer-list li{
+      margin-bottom:.55rem;
+      color:var(--muted);
+    }
+
+    .small{
+      color:var(--muted);
+      font-size:.95rem;
+    }
+
+    :focus-visible{
+      outline:3px solid rgba(183,102,67,.35);
+      outline-offset:3px;
+      border-radius:8px;
+    }
+
+    @media (max-width: 1024px){
+      .hero-grid,
+      .section-grid,
+      .grid-3,
+      .grid-2,
+      .partners,
+      .footer-grid,
+      .meta-row,
+      .cta-block{
+        grid-template-columns:1fr;
+      }
+
+      nav ul{
+        display:none;
+      }
+
+      .topbar-inner{
+        flex-direction:column;
+        justify-content:center;
+        padding:.5rem 0;
+        align-items:flex-start;
+      }
+
+      h1{
+        max-width:14ch;
+      }
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "ZWISCHENWELTEN",
+    "url": "https://www.example.org/",
+    "inLanguage": "de-DE",
+    "description": "Interkulturelles und mehrsprachiges Journalistennetzwerk in Berlin.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "ZWISCHENWELTEN",
+      "url": "https://www.example.org/"
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "ZWISCHENWELTEN",
+    "url": "https://www.example.org/",
+    "logo": "https://www.example.org/assets/logo.png",
+    "email": "info@kubik-ev.de",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Berlin",
+      "addressCountry": "DE"
+    },
+    "contactPoint": [
+      {
+        "@type": "ContactPoint",
+        "contactType": "project coordination",
+        "name": "Süleyman Bag",
+        "telephone": "+49-174-7857245",
+        "email": "info@kubik-ev.de",
+        "availableLanguage": ["de","en","tr"]
+      },
+      {
+        "@type": "ContactPoint",
+        "contactType": "media contact",
+        "name": "Dominique Hensel",
+        "telephone": "+49-163-6871276",
+        "email": "kiezreporterin@gmx.de",
+        "availableLanguage": ["de","en"]
+      },
+      {
+        "@type": "ContactPoint",
+        "contactType": "project contact",
+        "name": "Azamat Damir",
+        "telephone": "+49-176-41121881",
+        "email": "info@kubik-ev.de",
+        "availableLanguage": ["de","en"]
+      }
+    ],
+    "sameAs": []
+  }
+  </script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Zum Inhalt springen</a>
+
+  <div class="topbar" aria-label="Projektinformationen">
+    <div class="container topbar-inner">
+      <small>
+        <span>Gefördert seit 01.01.2026</span>
+        <span>Berlin</span>
+        <span>Interkulturelles Kultur-, Medien- und Bildungsprojekt</span>
+      </small>
+      <div class="lang-switch" aria-label="Sprachauswahl">
+        <a href="/" aria-current="true">DE</a>
+        <a href="/en/">EN</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header" aria-label="Kopfbereich">
+    <div class="container nav">
+      <a class="brand" href="/" aria-label="ZWISCHENWELTEN Startseite">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-text">
+          <strong>ZWISCHENWELTEN</strong>
+          <span>Journalistennetzwerk in Berlin</span>
+        </span>
+      </a>
+
+      <nav aria-label="Hauptnavigation">
+        <ul>
+          <li><a href="#projekt">Projekt</a></li>
+          <li><a href="#philosophie">Philosophie</a></li>
+          <li><a href="#schwerpunkte">Schwerpunkte</a></li>
+          <li><a href="#netzwerk">Netzwerk</a></li>
+          <li><a href="#mitmachen">Mitmachen</a></li>
+          <li><a href="#kontakt">Kontakt</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container">
+        <div class="hero-grid">
+          <div>
+            <span class="eyebrow">Interkulturelles und mehrsprachiges Journalistennetzwerk</span>
+            <h1 id="hero-title">Journalismus aus den Zwischenräumen der Stadt.</h1>
+            <p class="hero-intro">
+              ZWISCHENWELTEN ist ein Berliner Projekt an der Schnittstelle von Journalismus,
+              Zivilgesellschaft und kultureller Bildung. Es macht Perspektiven sichtbar, die im öffentlichen
+              Diskurs häufig unterrepräsentiert sind, und entwickelt dialogische Medienformate für eine
+              postmigrantische Stadtgesellschaft.
+            </p>
+
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#projekt">Projekt entdecken</a>
+              <a class="btn btn-secondary" href="#kontakt">Kontakt aufnehmen</a>
+            </div>
+          </div>
+
+          <aside class="hero-side" aria-label="Einordnung">
+            <div class="label">Projektprofil</div>
+            <p>
+              Nicht Anpassung oder symbolische Sichtbarkeit stehen im Mittelpunkt,
+              sondern die aktive Mitgestaltung der Berliner Medienöffentlichkeit
+              durch Stimmen aus gesellschaftlichen Zwischenpositionen.
+            </p>
+
+            <div class="meta-row">
+              <div class="meta-box">
+                <strong>Förderzeitraum</strong>
+                <span>01.01.2026 bis 31.12.2027</span>
+              </div>
+              <div class="meta-box">
+                <strong>Schwerpunkt</strong>
+                <span>Dialog, Mehrsprachigkeit und demokratische Öffentlichkeit</span>
+              </div>
+            </div>
+          </aside>
+        </div>
+
+        <hr class="divider">
+      </div>
+    </section>
+
+    <section id="projekt" aria-labelledby="projekt-title">
+      <div class="container section-grid">
+        <div class="section-title">
+          <small>Projekt</small>
+          <h2 id="projekt-title">Was ZWISCHENWELTEN ist</h2>
+        </div>
+
+        <div class="section-body">
+          <div class="lead-block">
+            <p>
+              ZWISCHENWELTEN ist ein interkulturelles Kultur-, Medien- und Bildungsprojekt,
+              das journalistische Stimmen aus migrantischen, religiösen und sozialen Zwischenräumen
+              professionalisiert und systematisch in lokale Öffentlichkeiten einbindet.
+            </p>
+            <p>
+              Das Projekt stärkt demokratische Öffentlichkeit, fördert gesellschaftliche Teilhabe
+              und trägt zum Abbau von Vorurteilen, Misstrauen und Polarisierung bei.
+            </p>
+          </div>
+
+          <div class="grid-3">
+            <article class="panel">
+              <h3>Journalismus</h3>
+              <p>Professionelle Begleitung, redaktionelle Standards und differenzierte Berichterstattung aus dem Kiez.</p>
+            </article>
+            <article class="panel">
+              <h3>Bildung</h3>
+              <p>Qualifizierung und Unterstützung von Bürgerredakteur:innen mit Flucht- und Migrationserfahrung.</p>
+            </article>
+            <article class="panel">
+              <h3>Zivilgesellschaft</h3>
+              <p>Kooperationen mit Partnern aus Kultur, Religion, Bildung, Medien und Nachbarschaften in Berlin.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="philosophie" aria-labelledby="philosophie-title">
+      <div class="container section-grid">
+        <div class="section-title">
+          <small>Philosophie</small>
+          <h2 id="philosophie-title">Zwischenwelten als Haltung</h2>
+        </div>
+
+        <div class="section-body">
+          <p class="philosophy-quote">
+            Berlin ist eine Stadt der sprachlichen, kulturellen und sozialen Zwischenräume.
+          </p>
+          <p>
+            ZWISCHENWELTEN versteht diese Zwischenräume nicht als Defizit, sondern als gesellschaftliche Ressource.
+            Das Projekt begreift Vielfalt als Grundlage einer lebendigen, dialogfähigen und demokratischen Öffentlichkeit.
+          </p>
+          <p>
+            Im Mittelpunkt steht die gemeinsame Narrativbildung in einer postmigrantischen Stadtgesellschaft:
+            journalistisch fundiert, lokal verankert und offen für unterschiedliche Perspektiven.
+          </p>
+
+          <ul class="statements">
+            <li>Dialog statt Schubladendenken</li>
+            <li>Mehrsprachigkeit als urbane Realität</li>
+            <li>Professionelle Standards und Teilhabe</li>
+            <li>Kooperation als gemeinsame Zukunftsgestaltung</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="schwerpunkte" aria-labelledby="schwerpunkte-title">
+      <div class="container section-grid">
+        <div class="section-title">
+          <small>Schwerpunkte</small>
+          <h2 id="schwerpunkte-title">Wie das Projekt arbeitet</h2>
+        </div>
+
+        <div class="section-body">
+          <div class="grid-2">
+            <article class="panel">
+              <h3>Interkulturelles Journalistennetzwerk</h3>
+              <p>Aufbau und Verstetigung eines Netzwerks, das unterschiedliche Bezirke, Communities und Perspektiven miteinander verbindet.</p>
+            </article>
+            <article class="panel">
+              <h3>Redaktionelle Qualifizierung</h3>
+              <p>Begleitung von Bürgerredakteur:innen in Text, Bild und Video mit journalistischer und medienethischer Orientierung.</p>
+            </article>
+            <article class="panel">
+              <h3>Diskursive Medienformate</h3>
+              <p>Formate, die Austausch ermöglichen, gesellschaftliche Entwicklungen sichtbar machen und Repräsentationsfragen reflektieren.</p>
+            </article>
+            <article class="panel">
+              <h3>Lokale Verankerung</h3>
+              <p>Arbeit in konkreten Berliner Kiezen, um Alltag, Konflikte und Ressourcen differenziert und niedrigschwellig abzubilden.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="netzwerk" aria-labelledby="netzwerk-title">
+      <div class="container section-grid">
+        <div class="section-title">
+          <small>Netzwerk</small>
+          <h2 id="netzwerk-title">Träger und Partner</h2>
+        </div>
+
+        <div class="section-body">
+          <p>
+            Hauptprojektträger ist Kubik e.V. Weitere Projektträger sind die Evangelische Kirchengemeinde am Gesundbrunnen
+            sowie die Journalisten Hensel und Schnell GbR. Ergänzt wird das Projekt durch ein berlinweites Netzwerk aus
+            Institutionen aus Kultur, Religion, Bildung und Zivilgesellschaft.
+          </p>
+
+          <div class="partners" aria-label="Projektträger und Projektpartner">
+            <div class="partner">Kubik e.V.</div>
+            <div class="partner">Evangelische Kirchengemeinde am Gesundbrunnen</div>
+            <div class="partner">Hensel und Schnell GbR</div>
+            <div class="partner">Forum Dialog e.V.</div>
+            <div class="partner">I-ISIN e.V.</div>
+            <div class="partner">eventus Bildung gGmbH</div>
+            <div class="partner">KuKiez e.V.</div>
+            <div class="partner">Janainas e.V.</div>
+            <div class="partner">Stiftung SPI / Sozialpädagogisches Institut Berlin „Walter May“</div>
+            <div class="partner">Brunnenviertel e.V.</div>
+            <div class="partner">Markaz-e Farhangi – Kulturzentrum der Afghanen in Berlin e.V.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="mitmachen" aria-labelledby="mitmachen-title">
+      <div class="container section-grid">
+        <div class="section-title">
+          <small>Mitmachen</small>
+          <h2 id="mitmachen-title">An wen sich das Projekt richtet</h2>
+        </div>
+
+        <div class="section-body">
+          <div class="grid-2">
+            <article class="panel">
+              <h3>Medienschaffende und Journalist:innen</h3>
+              <p>Für Menschen und Redaktionen, die Vielfalt differenziert abbilden und dialogfähige Öffentlichkeiten stärken möchten.</p>
+            </article>
+            <article class="panel">
+              <h3>Bürgerredakteur:innen</h3>
+              <p>Für Menschen mit Flucht- und Migrationserfahrung, die journalistische Selbstwirksamkeit entwickeln und öffentlich sichtbar werden möchten.</p>
+            </article>
+            <article class="panel">
+              <h3>Communities und Multiplikator:innen</h3>
+              <p>Für Akteure aus migrantischen, muslimischen, religiösen und zivilgesellschaftlichen Kontexten in Berlin.</p>
+            </article>
+            <article class="panel">
+              <h3>Kooperationspartner</h3>
+              <p>Für Institutionen aus Kultur, Religion, Bildung, Medien und Zivilgesellschaft, die pluralen Austausch gemeinsam gestalten wollen.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="kontakt" aria-labelledby="kontakt-title">
+      <div class="container">
+        <div class="cta-block">
+          <div>
+            <div class="section-title" style="margin-bottom:.4rem;">
+              <small>Kontakt</small>
+              <h2 id="kontakt-title">Kooperation, Vernetzung, Rückfragen</h2>
+            </div>
+            <p style="margin:0; color:var(--muted); max-width:64ch;">
+              Sie möchten mitwirken, eine Kooperation anfragen oder mehr über ZWISCHENWELTEN erfahren?
+              Wir freuen uns über Ihre Nachricht.
+            </p>
+          </div>
+
+          <div>
+            <a class="btn btn-primary" href="mailto:info@kubik-ev.de">E-Mail schreiben</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer aria-label="Fußbereich">
+    <div class="container footer-grid">
+      <div>
+        <div class="footer-title">ZWISCHENWELTEN</div>
+        <p class="small">
+          Interkulturelles und mehrsprachiges Journalistennetzwerk in Berlin.
+          Ein Projekt an der Schnittstelle von Journalismus, Zivilgesellschaft und kultureller Bildung.
+        </p>
+      </div>
+
+      <div>
+        <div class="footer-title">Ansprechpersonen</div>
+        <ul class="footer-list">
+          <li>Süleyman Bag · +49 174 785 72 45</li>
+          <li>Dominique Hensel · +49 163 6871 276</li>
+          <li>Azamat Damir · +49 176 41 121 881</li>
+          <li><a href="mailto:info@kubik-ev.de">info@kubik-ev.de</a></li>
+          <li><a href="mailto:kiezreporterin@gmx.de">kiezreporterin@gmx.de</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-title">Weiteres</div>
+        <ul class="footer-list">
+          <li><a href="/impressum.html">Impressum</a></li>
+          <li><a href="/datenschutz.html">Datenschutz</a></li>
+          <li><a href="/barrierefreiheit.html">Barrierefreiheit</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
