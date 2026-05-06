@@ -831,6 +831,50 @@
       padding:0 0 34px;
     }
 
+    .partners{
+      border-top:1px solid var(--line-strong);
+      padding:26px 0 22px;
+      display:flex;
+      align-items:center;
+      gap:32px;
+      flex-wrap:wrap;
+    }
+
+    .partners-label{
+      font-size:12px;
+      font-weight:600;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      color:var(--text-soft);
+      margin-right:8px;
+    }
+
+    .partners-logos{
+      display:flex;
+      align-items:center;
+      gap:36px;
+      flex-wrap:wrap;
+    }
+
+    .partner-logo{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      height:54px;
+      transition:opacity .2s ease;
+    }
+
+    .partner-logo img{
+      max-height:100%;
+      width:auto;
+      object-fit:contain;
+      display:block;
+    }
+
+    .partner-logo:hover{
+      opacity:.75;
+    }
+
     .footer-inner{
       border-top:1px solid var(--line-strong);
       padding-top:18px;
@@ -1315,12 +1359,26 @@
     </main>
 
     <footer class="footer" aria-label="Fußbereich">
-      <div class="container footer-inner">
-        <div>ZWISCHENWELTEN · Berlin · Bürgerredaktion · Journalistennetzwerk · Medienwettbewerb 2026</div>
-        <div class="footer-links">
-          <a href="/impressum.html">Impressum</a>
-          <a href="/datenschutz.html">Datenschutz</a>
-          <a href="/barrierefreiheit.html">Barrierefreiheit</a>
+      <div class="container">
+        <div class="partners" aria-label="Projektpartner">
+          <span class="partners-label">Gefördert durch</span>
+          <div class="partners-logos">
+            <a href="https://www.berlin.de/" class="partner-logo" target="_blank" rel="noopener" aria-label="Land Berlin">
+              <img src="berlin_logo.png" alt="Land Berlin">
+            </a>
+            <a href="https://www.degewo.de/" class="partner-logo" target="_blank" rel="noopener" aria-label="degewo">
+              <img src="Degewo_Logo.svg.png" alt="degewo">
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-inner">
+          <div>ZWISCHENWELTEN · Berlin · Bürgerredaktion · Journalistennetzwerk · Medienwettbewerb 2026</div>
+          <div class="footer-links">
+            <a href="/impressum.html">Impressum</a>
+            <a href="/datenschutz.html">Datenschutz</a>
+            <a href="/barrierefreiheit.html">Barrierefreiheit</a>
+          </div>
         </div>
       </div>
     </footer>
