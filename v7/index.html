@@ -209,12 +209,12 @@
       display:grid;
       grid-template-columns: 1.05fr 0.95fr;
       gap:28px;
-      align-items:start;
+      align-items:center;
       min-height:580px;
     }
 
     .hero-left{
-      padding-top:34px;
+      padding-top:0;
     }
 
     .eyebrow{
@@ -244,7 +244,7 @@
     .hero-title{
       margin:0;
       font-size:clamp(48px, 7.4vw, 80px);
-      line-height:0.95;
+      line-height:1.15;
       letter-spacing:-0.06em;
       font-weight:700;
       max-width:11ch;
@@ -257,6 +257,16 @@
       border-radius:.1em;
       box-decoration-break:clone;
       -webkit-box-decoration-break:clone;
+    }
+
+    .hero-subtitle{
+      margin:18px 0 0;
+      font-size:clamp(18px, 1.8vw, 22px);
+      line-height:1.35;
+      letter-spacing:-0.01em;
+      font-weight:500;
+      color:var(--text-soft);
+      max-width:22ch;
     }
 
     .hero-copy{
@@ -348,6 +358,104 @@
     .berlin-grid .blue{ background:var(--map-blue); }
     .berlin-grid .green{ background:var(--map-green); }
     .berlin-grid .soft{ background:var(--map-soft); }
+
+    /* PROMO BANNER (full-bleed) */
+    .promo-banner{
+      position:relative;
+      width:100%;
+      background:var(--text);
+      color:#fff;
+      padding:32px 0;
+      overflow:hidden;
+      isolation:isolate;
+    }
+    .promo-banner::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(700px 180px at 18% 50%, rgba(217,239,115,0.10), transparent 60%),
+        radial-gradient(560px 160px at 88% 50%, rgba(147,181,215,0.16), transparent 60%);
+      pointer-events:none;
+      z-index:-1;
+    }
+    .promo-banner::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:0;
+      height:2px;
+      background:linear-gradient(90deg, var(--accent), var(--map-soft), var(--accent));
+    }
+    .promo-inner{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:0 24px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .promo-date{
+      align-self:flex-start;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      font-size:11px;
+      letter-spacing:0.16em;
+      text-transform:uppercase;
+      font-weight:600;
+      color:var(--accent);
+      border:1px solid rgba(217,239,115,0.45);
+      padding:5px 11px;
+      border-radius:999px;
+    }
+    .promo-date .dot{
+      width:5px; height:5px;
+      border-radius:50%;
+      background:var(--accent);
+      box-shadow:0 0 0 3px rgba(217,239,115,0.18);
+    }
+    .promo-title{
+      margin:0;
+      font-size:clamp(22px, 3.4vw, 38px);
+      line-height:1;
+      letter-spacing:-0.035em;
+      font-weight:700;
+      white-space:nowrap;
+      display:flex;
+      align-items:baseline;
+      column-gap:0.35em;
+    }
+    .promo-title .promo-accent{
+      color:var(--accent);
+      font-style:italic;
+    }
+    .promo-sub{
+      margin:2px 0 0;
+      max-width:640px;
+      font-size:20px;
+      line-height:1.6;
+      color:rgba(255,255,255,0.78);
+    }
+    .promo-link{
+      align-self:flex-start;
+      margin-top:4px;
+      font-weight:600;
+      font-size:13px;
+      text-decoration:none;
+      color:var(--accent);
+      padding-bottom:2px;
+      border-bottom:1px solid rgba(217,239,115,0.6);
+      transition:transform .2s ease, opacity .2s ease;
+    }
+    .promo-link:hover{ opacity:0.85; transform:translateX(2px); }
+
+    @media (max-width:720px){
+      .promo-banner{ padding:24px 0; }
+      .promo-title{
+        font-size:clamp(18px, 5vw, 28px);
+        white-space:normal;
+      }
+    }
 
     /* SCHWERPUNKTE */
     .pillars{
@@ -1068,23 +1176,11 @@
       <section class="hero" aria-labelledby="hero-title">
         <div class="container hero-grid">
           <div class="hero-left">
-            <span class="eyebrow"><span class="pulse"></span>Schwerpunkt 2026 · 3. Oktober</span>
 
             <h1 class="hero-title" id="hero-title">
-              Drei Räume für <em>Vielfalt</em>, Dialog und Journalismus.
+              Zwischenwelten: Die Stimme der <em>Vielfalt</em>.
             </h1>
-
-            <p class="hero-copy">
-              ZWISCHENWELTEN bündelt 2026 drei Schwerpunkte: eine Bürgerredaktion aus
-              Berliner Kiezen, ein interkulturelles Journalistennetzwerk und den
-              Medienwettbewerb zum Tag der Deutschen Einheit –
-              <strong>Meine Einheit, Deine Einheit, Keine Einheit?</strong>
-            </p>
-
-            <div class="hero-cta">
-              <a href="#schwerpunkte" class="pill-btn">Schwerpunkte entdecken</a>
-              <a href="#wettbewerb" class="btn-ghost">Wettbewerb 2026 →</a>
-            </div>
+            <p class="hero-subtitle">Interkulturelles Medienprojekt für Vielfalt und Dialog</p>
           </div>
 
           <div class="hero-right" aria-hidden="true">
@@ -1128,19 +1224,27 @@
         </div>
       </section>
 
+      <!-- PROMO BANNER -->
+      <section class="promo-banner" aria-label="Medienwettbewerb 2026">
+        <div class="promo-inner">
+          <span class="promo-date"><span class="dot" aria-hidden="true"></span>Medienwettbewerb zum Tag der deutschen Einheit 2026</span>
+          <h2 class="promo-title">
+            <span>Meine Einheit.</span>
+            <span>Deine Einheit.</span>
+            <span class="promo-accent">Keine Einheit?</span>
+          </h2>
+          <p class="promo-sub">Vielfalt, gesellschaftlicher Zusammenhalt und die Rolle der Medien</p>
+          <a href="#wettbewerb" class="promo-link">Zum Medienwettbewerb →</a>
+        </div>
+      </section>
+
       <!-- SCHWERPUNKTE / DREI THEMEN -->
       <section class="pillars" id="schwerpunkte" aria-labelledby="pillars-title">
         <div class="container">
           <div class="pillars-head">
             <div>
-              <p class="section-eyebrow">Drei Schwerpunkte</p>
-              <h2 class="section-title" id="pillars-title">Wo Vielfalt ihre Stimme findet.</h2>
+              <p class="section-eyebrow" id="pillars-title">Drei Schwerpunkte</p>
             </div>
-            <p class="pillars-intro">
-              Drei eng miteinander verbundene Formate, die in Berlin neue Öffentlichkeiten
-              schaffen — von der Nachbarschaftsredaktion bis zum bundesweiten Diskurs am
-              Tag der Deutschen Einheit.
-            </p>
           </div>
 
           <div class="pillars-grid">
