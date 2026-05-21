@@ -359,6 +359,229 @@
     .berlin-grid .green{ background:var(--map-green); }
     .berlin-grid .soft{ background:var(--map-soft); }
 
+    /* PROJEKTFILME */
+    .films{
+      padding:14px 0 44px;
+    }
+    .films-head{
+      display:flex;
+      align-items:end;
+      justify-content:space-between;
+      gap:24px;
+      flex-wrap:wrap;
+      margin-bottom:22px;
+    }
+    .films-title{
+      margin:0;
+      font-size:clamp(28px, 3.4vw, 40px);
+      line-height:1.05;
+      letter-spacing:-0.04em;
+      font-weight:700;
+    }
+    .films-title em{
+      font-style:normal;
+      background:var(--accent);
+      padding:0 .15em;
+      border-radius:.1em;
+      box-decoration-break:clone;
+      -webkit-box-decoration-break:clone;
+    }
+    .films-note{
+      margin:0;
+      max-width:34ch;
+      font-size:14px;
+      line-height:1.55;
+      color:var(--muted);
+    }
+    .films-grid{
+      display:grid;
+      grid-template-columns:repeat(2, 1fr);
+      gap:22px;
+    }
+    .film-card{
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      background:var(--white);
+      border:1px solid var(--line-strong);
+      border-radius:18px;
+      overflow:hidden;
+      color:var(--text);
+      transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+      isolation:isolate;
+    }
+    .film-card:hover,
+    .film-card:focus-visible{
+      transform:translateY(-3px);
+      box-shadow:0 22px 44px rgba(18,63,122,0.12);
+      border-color:rgba(18,63,122,0.22);
+      outline:none;
+    }
+    .film-thumb{
+      position:relative;
+      aspect-ratio:16 / 9;
+      overflow:hidden;
+      background:var(--text);
+    }
+    .film-thumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      transition:transform .5s ease, filter .3s ease;
+    }
+    .film-card:hover .film-thumb img{
+      transform:scale(1.04);
+    }
+    .film-thumb::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg, rgba(18,63,122,0) 45%, rgba(18,63,122,0.55) 100%);
+      pointer-events:none;
+    }
+    .film-thumb-alex{
+      background:
+        radial-gradient(circle at 20% 20%, rgba(217,239,115,0.22), transparent 55%),
+        radial-gradient(circle at 80% 80%, rgba(147,181,215,0.32), transparent 60%),
+        linear-gradient(135deg, #0f3568 0%, #123f7a 55%, #1d5099 100%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .film-thumb-alex::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size:32px 32px;
+      mask-image:radial-gradient(ellipse at center, #000 30%, transparent 75%);
+      -webkit-mask-image:radial-gradient(ellipse at center, #000 30%, transparent 75%);
+    }
+    .film-thumb-fallback{
+      position:relative;
+      z-index:1;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:8px;
+      color:#fff;
+      text-align:center;
+      padding:0 24px;
+    }
+    .film-thumb-fallback .alex-mark{
+      font-size:clamp(28px, 3.2vw, 38px);
+      font-weight:800;
+      letter-spacing:-0.04em;
+      line-height:1;
+    }
+    .film-thumb-fallback .alex-mark span{
+      color:var(--accent);
+    }
+    .film-thumb-fallback .alex-sub{
+      font-size:11px;
+      letter-spacing:0.22em;
+      text-transform:uppercase;
+      font-weight:600;
+      color:rgba(255,255,255,0.72);
+    }
+    .film-play{
+      position:absolute;
+      left:20px;
+      bottom:20px;
+      z-index:2;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:54px;
+      height:54px;
+      border-radius:50%;
+      background:var(--accent);
+      color:var(--text);
+      box-shadow:0 10px 24px rgba(18,63,122,0.28);
+      transition:transform .25s ease, background .25s ease;
+    }
+    .film-play svg{
+      margin-left:3px;
+    }
+    .film-card:hover .film-play{
+      transform:scale(1.06);
+      background:var(--accent-dark);
+    }
+    .film-source{
+      position:absolute;
+      top:14px;
+      right:14px;
+      z-index:2;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      font-size:11px;
+      font-weight:600;
+      letter-spacing:0.12em;
+      text-transform:uppercase;
+      color:#fff;
+      background:rgba(18,63,122,0.6);
+      backdrop-filter:blur(6px);
+      -webkit-backdrop-filter:blur(6px);
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.18);
+    }
+    .film-source .dot{
+      width:5px; height:5px;
+      border-radius:50%;
+      background:var(--accent);
+    }
+    .film-info{
+      padding:20px 22px 22px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      flex:1;
+    }
+    .film-kicker{
+      font-size:11px;
+      letter-spacing:0.18em;
+      text-transform:uppercase;
+      font-weight:600;
+      color:var(--text-soft);
+    }
+    .film-name{
+      margin:0;
+      font-size:18px;
+      line-height:1.3;
+      letter-spacing:-0.02em;
+      font-weight:700;
+      color:var(--text);
+    }
+    .film-meta{
+      margin:0;
+      font-size:13px;
+      line-height:1.55;
+      color:var(--muted);
+    }
+    .film-cta{
+      margin-top:auto;
+      align-self:flex-start;
+      font-size:13px;
+      font-weight:600;
+      color:var(--text);
+      padding-bottom:2px;
+      border-bottom:1px solid var(--text);
+      transition:transform .2s ease, color .2s ease, border-color .2s ease;
+    }
+    .film-card:hover .film-cta{
+      transform:translateX(3px);
+    }
+
+    @media (max-width: 860px){
+      .films-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
     /* PROMO BANNER (full-bleed) */
     .promo-banner{
       position:relative;
@@ -1595,6 +1818,56 @@ ZWISCHENWELTEN baut ein interkulturelles Journalistennetzwerk auf – für kultu
                 <span class="fill soft"></span><span class="fill blue"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="fill blue"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="fill blue"></span><span class="fill blue"></span><span class="empty"></span><span class="empty"></span>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROJEKTFILME -->
+      <section class="films" aria-labelledby="films-title">
+        <div class="container">
+          <div class="films-head">
+            <div>
+              <p class="section-eyebrow">Projektfilme</p>
+              <h2 class="films-title" id="films-title">Zwischenwelten <em>im Bild</em>.</h2>
+            </div>
+            <p class="films-note">Zwei Filme über Bürgerredaktion, Ehrenamt und Teilhabe in Berlin.</p>
+          </div>
+
+          <div class="films-grid">
+            <a class="film-card" href="https://www.youtube.com/watch?v=T50Ep0B75wk" target="_blank" rel="noopener noreferrer" aria-label="Projektfilm auf YouTube ansehen (öffnet in neuem Tab)">
+              <div class="film-thumb">
+                <img src="https://i.ytimg.com/vi/T50Ep0B75wk/hqdefault.jpg" alt="" loading="lazy" width="480" height="360">
+                <span class="film-source"><span class="dot" aria-hidden="true"></span>YouTube</span>
+                <span class="film-play" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" focusable="false"><path d="M8 5v14l11-7z"/></svg>
+                </span>
+              </div>
+              <div class="film-info">
+                <span class="film-kicker">Projektfilm</span>
+                <h3 class="film-name">Zwischenwelten – Stimmen aus dem Brunnenviertel</h3>
+                <p class="film-meta">Einblick in die Bürgerredaktion und die Menschen, die sie tragen.</p>
+                <span class="film-cta">Film ansehen →</span>
+              </div>
+            </a>
+
+            <a class="film-card" href="https://www.alex-berlin.de/videos/2178383-ehrenamt--mehr-teilhabe-in-der-stadtgesellschaft" target="_blank" rel="noopener noreferrer" aria-label="Reportage bei ALEX Berlin ansehen (öffnet in neuem Tab)">
+              <div class="film-thumb film-thumb-alex">
+                <div class="film-thumb-fallback" aria-hidden="true">
+                  <span class="alex-mark">ALEX<span>·</span>Berlin</span>
+                  <span class="alex-sub">Reportage · Ehrenamt</span>
+                </div>
+                <span class="film-source"><span class="dot" aria-hidden="true"></span>ALEX Berlin</span>
+                <span class="film-play" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" focusable="false"><path d="M8 5v14l11-7z"/></svg>
+                </span>
+              </div>
+              <div class="film-info">
+                <span class="film-kicker">Reportage</span>
+                <h3 class="film-name">Ehrenamt: Mehr Teilhabe in der Stadtgesellschaft</h3>
+                <p class="film-meta">Wie ehrenamtliches Engagement Berlin lebendiger und gerechter macht.</p>
+                <span class="film-cta">Film ansehen →</span>
+              </div>
+            </a>
           </div>
         </div>
       </section>
