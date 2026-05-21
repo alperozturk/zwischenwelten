@@ -261,12 +261,12 @@
 
     .hero-subtitle{
       margin:18px 0 0;
-      font-size:clamp(18px, 1.8vw, 22px);
+      font-size:clamp(16px, 1.8vw, 16px);
       line-height:1.35;
       letter-spacing:-0.01em;
       font-weight:500;
       color:var(--text-soft);
-      max-width:22ch;
+      max-width:46ch;
     }
 
     .hero-copy{
@@ -816,12 +816,14 @@
 
     .big-word{
       margin:0;
-      font-size:clamp(72px, 12vw, 156px);
-      line-height:0.86;
-      letter-spacing:-0.08em;
+      font-size:clamp(64px, 10vw, 132px);
+      line-height:0.9;
+      letter-spacing:-0.07em;
       font-weight:800;
       text-transform:uppercase;
-      max-width:5ch;
+      max-width:9ch;
+      overflow-wrap:break-word;
+      hyphens:auto;
     }
 
     .approach-side{
@@ -1011,13 +1013,360 @@
       border-radius:10px;
     }
 
+    /* GOALS / ÜBER DAS PROJEKT */
+    .goals-section{
+      padding:20px 0 60px;
+    }
+
+    .goals-head{
+      display:grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap:36px;
+      align-items:end;
+      margin-bottom:30px;
+    }
+
+    .goals-title{
+      margin:0;
+      font-size:clamp(32px, 4vw, 48px);
+      line-height:1.05;
+      letter-spacing:-0.05em;
+      font-weight:700;
+      max-width:18ch;
+      color:var(--text);
+    }
+
+    .goals-intro{
+      margin:0 0 4px auto;
+      font-size:14px;
+      line-height:1.7;
+      color:#4f5964;
+      max-width:48ch;
+    }
+
+    .goals-subhead{
+      margin:6px 0 18px;
+      font-size:13px;
+      font-weight:600;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      color:var(--text-soft);
+    }
+
+    .goals-grid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:16px;
+      margin-bottom:24px;
+    }
+
+    .goal{
+      background:var(--white);
+      border:1px solid var(--line-strong);
+      border-radius:18px;
+      padding:22px 22px 24px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      min-height:148px;
+    }
+
+    .goal-num{
+      font-size:42px;
+      font-weight:800;
+      line-height:1;
+      letter-spacing:-0.04em;
+      color:var(--text);
+    }
+
+    .goal p{
+      margin:0;
+      font-size:13.5px;
+      line-height:1.55;
+      color:#4f5964;
+    }
+
+    .goals-footnote{
+      margin:0;
+      font-size:13px;
+      color:#556171;
+      border-top:1px solid var(--line-strong);
+      padding-top:18px;
+      max-width:760px;
+      line-height:1.65;
+    }
+
+    /* DETAIL SECTIONS (Bürgerredaktion / Netzwerk) */
+    .detail-section{
+      padding:30px 0;
+    }
+
+    .detail-card{
+      background:var(--white);
+      border:1px solid var(--line-strong);
+      border-radius:28px;
+      padding:42px clamp(28px, 4vw, 56px);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .detail-body{
+      display:grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap:48px;
+      align-items:stretch;
+    }
+
+    .detail-main{
+      display:flex;
+      flex-direction:column;
+    }
+
+    .detail-card::before{
+      content:"";
+      position:absolute;
+      width:320px;
+      height:320px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(217,239,115,.18), transparent 65%);
+      top:-160px;
+      right:-120px;
+      pointer-events:none;
+    }
+
+    .detail-dark .detail-card{
+      background:var(--text);
+      color:#f4f1e9;
+      border-color:var(--text);
+    }
+
+    .detail-dark .detail-card::before{
+      background:radial-gradient(circle, rgba(217,239,115,.22), transparent 65%);
+    }
+
+    .detail-eyebrow{
+      font-size:13px;
+      font-weight:600;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      color:var(--text-soft);
+      margin:0 0 12px;
+    }
+
+    .detail-dark .detail-eyebrow{
+      color:var(--accent);
+    }
+
+    .detail-header{
+      margin-bottom:28px;
+    }
+
+    .detail-title{
+      margin:0;
+      font-size:clamp(28px, 3.4vw, 40px);
+      line-height:1.05;
+      letter-spacing:-0.04em;
+      font-weight:700;
+      max-width:22ch;
+      color:var(--text);
+    }
+
+    .detail-dark .detail-title{
+      color:#f4f1e9;
+    }
+
+    .detail-main p{
+      margin:0 0 14px;
+      font-size:14px;
+      line-height:1.7;
+      color:#4f5964;
+      max-width:58ch;
+    }
+
+    .detail-dark .detail-main p{
+      color:rgba(244,241,233,.85);
+    }
+
+    .detail-lang{
+      font-style:italic;
+      font-size:13px;
+      opacity:.9;
+      margin-top:10px !important;
+    }
+
+    .detail-cta{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      margin-top:auto;
+      padding:0 22px;
+      min-height:46px;
+      border-radius:999px;
+      background:var(--accent);
+      color:var(--text);
+      font-weight:700;
+      font-size:14px;
+      letter-spacing:-0.01em;
+      align-self:flex-start;
+    }
+
+    .detail-dark .detail-cta{
+      background:var(--accent);
+      color:var(--text);
+    }
+
+    .detail-cta:hover{
+      background:var(--accent-dark);
+    }
+
+    .detail-aside h4{
+      margin:0 0 14px;
+      font-size:13px;
+      font-weight:700;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      color:var(--text);
+    }
+
+    .detail-aside h4 + .bullet-list{
+      margin-bottom:22px;
+    }
+
+    .detail-aside h4 + .bullet-list:last-child{
+      margin-bottom:0;
+    }
+
+    .detail-dark .detail-aside h4{
+      color:var(--accent);
+    }
+
+    .bullet-list{
+      list-style:none;
+      margin:0;
+      padding:0;
+      display:grid;
+      gap:10px;
+    }
+
+    .bullet-list li{
+      font-size:13.5px;
+      line-height:1.55;
+      color:#4f5964;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+    }
+
+    .detail-dark .bullet-list li{
+      color:rgba(244,241,233,.85);
+    }
+
+    .bullet-list li::before{
+      content:"";
+      flex-shrink:0;
+      margin-top:8px;
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background:var(--text);
+    }
+
+    .detail-dark .bullet-list li::before{
+      background:var(--accent);
+    }
+
+    /* TRÄGERSCHAFT */
+    .traegerschaft{
+      padding:40px 0 60px;
+    }
+
+    .traegerschaft-head{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:48px;
+      align-items:end;
+      margin-bottom:32px;
+    }
+
+    .traegerschaft-title{
+      margin:0;
+      font-size:clamp(32px, 4vw, 48px);
+      line-height:1.05;
+      letter-spacing:-0.05em;
+      font-weight:700;
+      max-width:18ch;
+      color:var(--text);
+    }
+
+    .partners-grid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:18px;
+    }
+
+    .partner-card{
+      background:var(--white);
+      border:1px solid var(--line-strong);
+      border-radius:22px;
+      padding:26px 24px 26px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .partner-tag{
+      align-self:flex-start;
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:0.1em;
+      text-transform:uppercase;
+      color:var(--text);
+      background:var(--accent);
+      padding:5px 11px;
+      border-radius:999px;
+      margin-bottom:6px;
+    }
+
+    .partner-card h3{
+      margin:0;
+      font-size:20px;
+      letter-spacing:-0.03em;
+      font-weight:700;
+      color:var(--text);
+      line-height:1.15;
+    }
+
+    .partner-card p{
+      margin:0;
+      font-size:13.5px;
+      line-height:1.6;
+      color:#4f5964;
+    }
+
+    .partner-address{
+      font-style:normal;
+      font-size:12.5px;
+      color:#556171;
+      margin-top:auto;
+      padding-top:8px;
+      border-top:1px solid var(--line);
+    }
+
     @media (max-width: 1100px){
       .hero-grid,
       .top-nav-inner,
       .approach-grid,
       .content-grid,
-      .pillars-head{
+      .pillars-head,
+      .goals-head,
+      .traegerschaft-head,
+      .detail-body{
         grid-template-columns:1fr;
+      }
+
+      .goals-grid,
+      .partners-grid{
+        grid-template-columns:repeat(2, 1fr);
       }
 
       .pillars-grid{
@@ -1105,6 +1454,21 @@
         grid-template-columns:1fr 1fr;
         gap:14px;
       }
+
+      .goals-grid,
+      .partners-grid{
+        grid-template-columns:1fr;
+      }
+
+      .detail-card{
+        padding:28px 22px;
+        gap:32px;
+      }
+
+      .goals-title,
+      .traegerschaft-title{
+        font-size:38px;
+      }
     }
   </style>
 
@@ -1180,7 +1544,9 @@
             <h1 class="hero-title" id="hero-title">
               Zwischenwelten: Die Stimme der <em>Vielfalt</em>.
             </h1>
-            <p class="hero-subtitle">Interkulturelles Medienprojekt für Vielfalt und Dialog</p>
+            <p class="hero-subtitle">Berlin ist eine der vielfältigsten Städte der Welt. In den Medien sieht das oft anders aus.
+ZWISCHENWELTEN baut ein interkulturelles Journalistennetzwerk auf – für kultursensible Berichterstattung, die die Realität dieser Stadt tatsächlich abbildet.
+</p>
           </div>
 
           <div class="hero-right" aria-hidden="true">
@@ -1249,7 +1615,7 @@
 
           <div class="pillars-grid">
 
-            <article class="pillar" id="buergerredaktion">
+            <article class="pillar" id="pillar-buergerredaktion">
               <div class="pillar-glyph" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H7l-3 3z"/><path d="M8 9h8M8 12h5"/></svg>
               </div>
@@ -1257,15 +1623,14 @@
               <h3>Bürgerredaktion</h3>
               <p class="pillar-meta">Stimmen aus dem Kiez</p>
               <p>
-                Eine partizipative Redaktion, in der Berlinerinnen und Berliner ihre
-                eigenen Geschichten erzählen — begleitet durch journalistische
-                Workshops, Mentoring und redaktionelle Standards.
+                Eine partizipative Redaktion, in der Berlinerinnen und Berliner ihre eigenen Geschichten erzählen – begleitet durch redaktionelle Betreuung und journalistische Standards. Seit zehn Jahren im Brunnenviertel. Jetzt gezielt diversifiziert.
+
               </p>
               <a href="#buergerredaktion" class="pillar-link">Mitmachen &amp; mitschreiben</a>
               <span class="pillar-deco" aria-hidden="true"></span>
             </article>
 
-            <article class="pillar" id="netzwerk">
+            <article class="pillar" id="pillar-netzwerk">
               <div class="pillar-glyph" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="12" cy="18" r="2.4"/><path d="M7.6 7.4l3 8.4M16.4 7.4l-3 8.4M8.4 6h7.2"/></svg>
               </div>
@@ -1273,9 +1638,8 @@
               <h3>Interkulturelles Journalistennetzwerk</h3>
               <p class="pillar-meta">Verbindet Stimmen &amp; Sprachen</p>
               <p>
-                Ein wachsendes Netzwerk aus Journalistinnen und Journalisten mit
-                postmigrantischen Biografien — für mehrsprachige, dialogische
-                Berichterstattung über und aus Berlin.
+                Ein wachsendes Netzwerk aus Journalist:innen und Bürgerredakteur:innen – für mehrsprachige, kultursensible Berichterstattung über und aus Berlin. Sprachen im Netzwerk: Deutsch, Türkisch, Arabisch, Russisch, Kurdisch, Englisch.
+
               </p>
               <a href="#netzwerk" class="pillar-link">Netzwerk kennenlernen</a>
               <span class="pillar-deco" aria-hidden="true"></span>
@@ -1293,7 +1657,7 @@
                 Reportagen, Kurzfilme und Podcasts machen plurale Perspektiven auf
                 Vielfalt und gesellschaftlichen Zusammenhalt sichtbar.
               </p>
-              <a href="medialog.html" class="pillar-link">Zum Medialog 2026</a>
+              <a href="medialog.html" class="pillar-link">Zum Wettbewerb</a>
               <span class="pillar-deco" aria-hidden="true"></span>
             </article>
 
@@ -1324,6 +1688,9 @@
               <div class="feature-block">
                 <h4>Ausgangsidee</h4>
                 <p>
+                  In Stadtteilen wie Wedding oder Gesundbrunnen leben Menschen aus Dutzenden Herkunftsländern zusammen. Ihr Alltag, ihre Konflikte und ihr Zusammenleben erscheinen in den etablierten Medien kaum – oder verzerrt. Gleichzeitig besteht ein tief verwurzeltes Misstrauen zwischen Communities und Medienschaffenden.
+
+<br>
                   Zum Tag der Deutschen Einheit am 3. Oktober 2026 entwickelt
                   ZWISCHENWELTEN ein multimediales journalistisches Format, das
                   unterschiedliche Perspektiven auf „Einheit“ sichtbar macht — und
@@ -1332,39 +1699,36 @@
               </div>
 
               <div class="feature-block">
-                <h4>Ziele</h4>
-                <ul class="feature-list">
-                  <li>Sichtbarmachung pluraler Perspektiven auf deutsche Einheit</li>
-                  <li>Stärkung dialogischer Öffentlichkeit als Kern unseres Ansatzes</li>
-                  <li>Förderung interkultureller journalistischer Stimmen</li>
-                  <li>Reflexion der Rolle von Medien für gesellschaftlichen Zusammenhalt</li>
-                </ul>
+                <h4>Wer kann teilnehmen?</h4>
+                <p>Journalist:innen, Bürgerredakteur:innen und Medienschaffende aus Berlin. Professionelle Erfahrung ist willkommen, aber keine Voraussetzung. Jeder Beitrag wird redaktionell begleitet.
+</p>
               </div>
             </div>
+            <h4>FORMATE</h4>
 
             <div class="formats" role="list" aria-label="Formate des Medienwettbewerbs">
               <div class="format" role="listitem">
                 <div class="format-icon" aria-hidden="true">📰</div>
-                <h5>Redaktionelle Beiträge</h5>
+                <h5>Reportagen</h5>
                 <p>
-                  Reportagen aus dem Kiez, Interviews zwischen Generationen und
-                  Communities sowie Meinungsstücke: „Was bedeutet Einheit für mich?“
+                  Texte aus dem Kiez – Interviews, Meinungsstücke, Porträts. Min. [LÄNGE] Zeichen.
+
                 </p>
               </div>
               <div class="format" role="listitem">
                 <div class="format-icon" aria-hidden="true">🎬</div>
                 <h5>Kurzfilm &amp; Video</h5>
                 <p>
-                  3–5-minütige Porträts, Social-Media-Clips und Mini-Dokumentationen
-                  aus verschiedenen Berliner Kiezen.
+                  Porträts, Social-Media-Clips, Mini-Dokumentationen aus Berliner Kiezen. Max. [LÄNGE] Minuten.
+
                 </p>
               </div>
               <div class="format" role="listitem">
                 <div class="format-icon" aria-hidden="true">🎙️</div>
                 <h5>Audio &amp; Podcast</h5>
                 <p>
-                  Gespräche zwischen Menschen mit unterschiedlichen Perspektiven —
-                  Dialog statt Monolog als Leitprinzip.
+                  Gespräche zwischen Menschen mit unterschiedlichen Perspektiven. Max. [LÄNGE] Minuten.
+
                 </p>
               </div>
             </div>
@@ -1377,68 +1741,198 @@
         </div>
       </section>
 
-      <!-- APPROACH STATEMENT -->
-      <section class="approach" aria-labelledby="approach-title">
-        <div class="container approach-grid">
-          <h2 class="big-word" id="approach-title">Wir erzählen Berlin neu.</h2>
+      <!-- ÜBER DAS PROJEKT – APPROACH STATEMENT -->
+      <section class="approach" id="ueber" aria-labelledby="approach-title">
+        <div class="container">
+          <p class="section-eyebrow">Über das Projekt</p>
+          <div class="approach-grid">
+            <h2 class="big-word" id="approach-title">Wir erzählen Berlin neu.</h2>
 
-          <div class="approach-side">
-            <h3>Journalismus als Raum für Dialog und Teilhabe</h3>
-            <p>
-              ZWISCHENWELTEN stärkt Stimmen, die im öffentlichen Diskurs oft
-              unterrepräsentiert sind — durch dialogische, mehrsprachige Formate
-              und redaktionelle Begleitung auf journalistischem Niveau.
-            </p>
+            <div class="approach-side">
+              <h3>Journalismus als Raum für Dialog und Teilhabe</h3>
+              <p>
+                ZWISCHENWELTEN stärkt Stimmen, die im öffentlichen Diskurs oft
+                unterrepräsentiert sind – durch mehrsprachige Formate
+                und redaktionelle Begleitung auf journalistischem Niveau.
+              </p>
 
-            <div class="stats">
-              <div class="stat">
-                <strong>Mehrsprachig</strong>
-                <span>Urbane Lebensrealitäten sichtbar machen</span>
-              </div>
-              <div class="stat">
-                <strong>Dialogisch</strong>
-                <span>Begegnungsräume statt Monolog</span>
-              </div>
-              <div class="stat">
-                <strong>Lokal</strong>
-                <span>Verankerung in Berliner Kiezen</span>
-              </div>
-              <div class="stat">
-                <strong>Professionell</strong>
-                <span>Redaktionelle Standards</span>
+              <div class="stats">
+                <div class="stat">
+                  <strong>Mehrsprachig</strong>
+                  <span>Türkisch, Arabisch, Russisch, Kurdisch, Englisch, Deutsch (KI-unterstützte Übersetzung)</span>
+                </div>
+                <div class="stat">
+                  <strong>Dialogisch</strong>
+                  <span>Begegnungsräume statt Monolog</span>
+                </div>
+                <div class="stat">
+                  <strong>Lokal</strong>
+                  <span>Verankerung in Berliner Kiezen: Wedding, Gesundbrunnen, Berlin-Mitte</span>
+                </div>
+                <div class="stat">
+                  <strong>Professionell</strong>
+                  <span>Redaktionelle Standards und interkultureller Medienkodex</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ABOUT & CONTACT -->
-      <section class="content-row">
-        <div class="container content-grid">
-          <div class="content-block">
-            <h3>Über das Projekt</h3>
-            <h2>Zwischen kulturellen Räumen entstehen neue Öffentlichkeiten.</h2>
-            <p>
-              ZWISCHENWELTEN ist ein interkulturelles Kultur-, Medien- und
-              Bildungsprojekt an der Schnittstelle von Journalismus, Zivilgesellschaft
-              und kultureller Bildung. Im Mittelpunkt stehen nicht symbolische
-              Repräsentation, sondern aktive Mitgestaltung der Berliner
-              Medienöffentlichkeit durch Menschen aus gesellschaftlichen
-              Zwischenpositionen.
+      <!-- ÜBER DAS PROJEKT – ZIELE -->
+      <section class="goals-section" aria-labelledby="goals-title">
+        <div class="container">
+          <div class="goals-head">
+            <h2 class="goals-title" id="goals-title">Zwischen kulturellen Räumen entstehen neue Öffentlichkeiten.</h2>
+            <p class="goals-intro">
+              ZWISCHENWELTEN ist ein interkulturelles Medien- und Bildungsprojekt an der Schnittstelle von Journalismus, Zivilgesellschaft und kultureller Bildung. Im Mittelpunkt steht nicht symbolische Repräsentation, sondern aktive Mitgestaltung der Berliner Medienöffentlichkeit durch Menschen, deren Perspektiven bisher fehlen.
             </p>
           </div>
 
-          <div class="content-block">
-            <h3>Trägerschaft &amp; Netzwerk</h3>
-            <h2>Getragen von Partnern aus Medien, Kultur und Zivilgesellschaft.</h2>
-            <p>
-              Hauptprojektträger ist Kubik e.V. Weitere Projektträger sind die
-              Evangelische Kirchengemeinde am Gesundbrunnen sowie die Journalisten
-              Hensel und Schnell GbR. Ergänzt wird das Projekt durch ein berlinweites
-              Netzwerk mit Institutionen aus Bildung, Religion, Kultur und
-              Nachbarschaftsarbeit.
-            </p>
+          <p class="goals-subhead">Konkret bis Ende 2027:</p>
 
+          <div class="goals-grid">
+            <div class="goal">
+              <span class="goal-num">24+</span>
+              <p>kultursensible Texte im Brunnen Magazin</p>
+            </div>
+            <div class="goal">
+              <span class="goal-num">25</span>
+              <p>aktive Bürgerredakteur:innen mit diversen Hintergründen</p>
+            </div>
+            <div class="goal">
+              <span class="goal-num">15</span>
+              <p>Mitglieder im interkulturellen Journalistennetzwerk</p>
+            </div>
+            <div class="goal">
+              <span class="goal-num">1</span>
+              <p>Zwischenwelten-Konferenz (2027) für Medienschaffende und Community-Multiplikatoren</p>
+            </div>
+            <div class="goal">
+              <span class="goal-num">250</span>
+              <p>Kontakte im Newsletter-Verteiler</p>
+            </div>
+            <div class="goal">
+              <span class="goal-num">1</span>
+              <p>gemeinsamer Medienkodex für kultursensible Berichterstattung</p>
+            </div>
+          </div>
+
+          <p class="goals-footnote">
+            Das Projekt wird von Januar 2026 bis Dezember 2027 vom Berliner Senat für Kultur und Gesellschaftlichen Zusammenhalt gefördert.
+          </p>
+        </div>
+      </section>
+
+      <!-- BÜRGERREDAKTION DETAIL -->
+      <section class="detail-section" id="buergerredaktion" aria-labelledby="buergerredaktion-title">
+        <div class="container">
+          <div class="detail-card">
+            <header class="detail-header">
+              <p class="detail-eyebrow">Bürgerredaktion</p>
+              <h2 class="detail-title" id="buergerredaktion-title">Die Bürgerredaktion im Brunnenviertel</h2>
+            </header>
+
+            <div class="detail-body">
+              <div class="detail-main">
+                <p>
+                  Seit 2015 erzählt die Bürgerredaktion im Brunnenviertel Geschichten aus dem Kiez – im gedruckten Kiezmagazin „brunnen“ (2.000 Leser:innen pro Ausgabe) und auf brunnenmagazin.de (40.000 Seitenzugriffe/Jahr).
+                </p>
+                <p>
+                  Mit ZWISCHENWELTEN wird diese Redaktion gezielt diversifiziert: Neue Mitglieder mit unterschiedlichen religiösen, kulturellen und weltanschaulichen Hintergründen bringen Perspektiven ein, die bisher fehlen.
+                </p>
+                <p>
+                  Jedes Textprojekt wird individuell redaktionell begleitet. Schreiberfahrung ist willkommen, aber keine Voraussetzung.
+                </p>
+                <a href="mailto:zwischenwelten@kubik-ev.de" class="detail-cta">Jetzt mitmachen →</a>
+              </div>
+
+              <aside class="detail-aside">
+                <h4>Wir suchen:</h4>
+                <ul class="bullet-list">
+                  <li>Menschen aus Wedding, Gesundbrunnen und Umgebung</li>
+                  <li>Schreiber:innen mit Migrations- oder Fluchterfahrung</li>
+                  <li>Stimmen aus muslimischen, christlichen und anderen Communities</li>
+                  <li>Menschen, die Geschichten aus ihrem Alltag erzählen wollen</li>
+                </ul>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- NETZWERK DETAIL -->
+      <section class="detail-section detail-dark" id="netzwerk" aria-labelledby="netzwerk-title">
+        <div class="container">
+          <div class="detail-card">
+            <header class="detail-header">
+              <p class="detail-eyebrow">Netzwerk</p>
+              <h2 class="detail-title" id="netzwerk-title">Das interkulturelle Journalistennetzwerk</h2>
+            </header>
+
+            <div class="detail-body">
+              <div class="detail-main">
+                <p>
+                  Das Netzwerk verbindet Profijournalist:innen, Bürgerredakteur:innen und Community-Akteure – Menschen, die schreiben können, und Menschen, die Geschichten kennen, die noch niemand erzählt hat.
+                </p>
+                <p>
+                  Gemeinsam entwickelt das Netzwerk einen Medienkodex für kultursensible Berichterstattung – mit Diversity-Styleguides, Sprachleitfaden und Bildrichtlinien – als Grundlage für eine andere Art von Journalismus.
+                </p>
+                <p class="detail-lang">Sprachen im Netzwerk: Deutsch, Türkisch, Arabisch, Russisch, Kurdisch, Englisch</p>
+                <a href="mailto:zwischenwelten@kubik-ev.de" class="detail-cta">Jetzt Kontakt aufnehmen →</a>
+              </div>
+
+              <aside class="detail-aside">
+                <h4>Was das Netzwerk bietet:</h4>
+                <ul class="bullet-list">
+                  <li>Redaktionelle Begleitung und Qualifizierung</li>
+                  <li>Zugang zu Communities und Quellen, die sonst schwer erreichbar sind</li>
+                  <li>Veröffentlichung im Brunnen Magazin und auf zwischenwelten.de</li>
+                  <li>Regelmäßige Netzwerktreffen mit Case Clinics und Pitch-Austausch</li>
+                  <li>Sichtbarkeit in einem stadtweiten, geförderten Projekt</li>
+                </ul>
+
+                <h4>Wen wir suchen:</h4>
+                <ul class="bullet-list">
+                  <li>Journalist:innen mit Interesse an interkulturellen und religiösen Themen</li>
+                  <li>Bürgerredakteur:innen mit Migrations- oder Fluchterfahrung</li>
+                  <li>Multiplikator:innen aus muslimischen, christlichen und anderen Communities</li>
+                </ul>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TRÄGERSCHAFT & NETZWERK -->
+      <section class="traegerschaft" id="traegerschaft" aria-labelledby="traegerschaft-title">
+        <div class="container">
+          <div class="traegerschaft-head">
+            <div>
+              <p class="section-eyebrow">Trägerschaft &amp; Netzwerk</p>
+              <h2 class="traegerschaft-title" id="traegerschaft-title">Getragen von Partnern aus Medien, Kultur und Zivilgesellschaft.</h2>
+            </div>
+          </div>
+
+          <div class="partners-grid">
+            <article class="partner-card">
+              <span class="partner-tag">Hauptprojektträger</span>
+              <h3>Kubik e.V.</h3>
+              <p>Migrantenselbstorganisation in Berlin-Mitte mit über 80 Ehrenamtlichen und mehrsprachigem Team.</p>
+              <address class="partner-address">Pankstr. 45, 13357 Berlin</address>
+            </article>
+
+            <article class="partner-card">
+              <span class="partner-tag">Bürgerredaktion</span>
+              <h3>Hensel und Schnell GbR</h3>
+              <p>Aufbau und Leitung der Bürgerredaktion im Brunnenviertel seit 2015. Erfahrung in hyperlokalen Kiezmedien seit 1998.</p>
+            </article>
+
+            <article class="partner-card">
+              <span class="partner-tag">Projektmitglied</span>
+              <h3>Evangelische Kirchengemeinde am Gesundbrunnen</h3>
+              <p>Mitglied der Bürgerredaktion und Brücke in die Stadtgesellschaft.</p>
+            </article>
           </div>
         </div>
       </section>
@@ -1447,7 +1941,7 @@
     <footer class="footer" aria-label="Fußbereich">
       <div class="container">
         <div class="partners" aria-label="Projektpartner">
-          <span class="partners-label">Gefördert durch</span>
+          <span class="partners-label">Unterstützt durch</span>
           <div class="partners-logos">
             <a href="https://www.berlin.de/" class="partner-logo" target="_blank" rel="noopener" aria-label="Land Berlin">
               <img src="berlin_logo.png" alt="Land Berlin">
