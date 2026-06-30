@@ -51,6 +51,169 @@
       font-size:clamp(20px, 2.4vw, 26px);
       letter-spacing:-0.02em;
     }
+
+    /* Chip / tag clouds (Teilnahme, Formate) */
+    .tag-cloud{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin:6px 0 0;
+      padding:0;
+      list-style:none;
+    }
+    .tag-cloud li{
+      display:inline-flex;
+      align-items:center;
+      font-size:14px;
+      font-weight:600;
+      line-height:1.3;
+      color:var(--text);
+      background:rgba(18,63,122,0.05);
+      border:1px solid var(--line-strong);
+      padding:9px 16px;
+      border-radius:999px;
+    }
+    .tag-cloud li::before{ content:none; }
+    .prose-card.is-accent .tag-cloud li{
+      background:#fff;
+      border-color:rgba(18,63,122,0.15);
+      color:var(--text);
+    }
+
+    /* Question list (Thematische Schwerpunkte) */
+    .q-list{
+      list-style:none;
+      margin:6px 0 0;
+      padding:0;
+      display:grid;
+      grid-template-columns:repeat(2, 1fr);
+      gap:12px;
+    }
+    .q-list li{
+      position:relative;
+      padding:16px 18px 16px 50px;
+      background:rgba(18,63,122,0.04);
+      border:1px solid var(--line);
+      border-radius:16px;
+      font-size:15px;
+      line-height:1.5;
+      color:var(--text);
+      font-weight:500;
+    }
+    .q-list li::before{
+      content:"?";
+      position:absolute;
+      left:16px;
+      top:15px;
+      width:24px;
+      height:24px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:var(--accent);
+      color:var(--text);
+      font-weight:800;
+      font-size:14px;
+      border-radius:8px;
+    }
+    @media (max-width:760px){ .q-list{ grid-template-columns:1fr; } }
+
+    /* Prize podium */
+    .podium{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:16px;
+      align-items:end;
+      margin:10px 0 20px;
+    }
+    .podium-card{
+      background:#fff;
+      border:1px solid var(--line-strong);
+      border-radius:22px;
+      padding:28px 22px;
+      text-align:center;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:6px;
+    }
+    .podium-card .medal{ font-size:42px; line-height:1; }
+    .podium-card .place{
+      font-size:13px;
+      font-weight:700;
+      letter-spacing:0.06em;
+      text-transform:uppercase;
+      color:var(--text-soft);
+      margin-top:4px;
+    }
+    .podium-card .amount{
+      font-size:clamp(22px, 2.6vw, 30px);
+      font-weight:800;
+      letter-spacing:-0.03em;
+      color:var(--text);
+    }
+    .podium-card.gold{
+      border-color:var(--text);
+      box-shadow:0 22px 46px -28px rgba(18,63,122,0.55);
+      padding-top:34px;
+      padding-bottom:34px;
+    }
+    @media (max-width:760px){ .podium{ grid-template-columns:1fr; align-items:stretch; } }
+
+    /* Date callouts (Einreichungszeitraum) */
+    .date-grid{
+      display:grid;
+      grid-template-columns:repeat(2, 1fr);
+      gap:14px;
+      margin:6px 0 8px;
+    }
+    .date-card{
+      background:#fff;
+      border:1px solid var(--line-strong);
+      border-radius:16px;
+      padding:18px 20px;
+    }
+    .date-card .date-label{
+      margin:0 0 6px;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      color:var(--text-soft);
+    }
+    .date-card .date-value{
+      margin:0;
+      font-size:clamp(18px, 2vw, 22px);
+      font-weight:800;
+      letter-spacing:-0.02em;
+      color:var(--text);
+    }
+    @media (max-width:760px){ .date-grid{ grid-template-columns:1fr; } }
+
+    /* Email CTA */
+    .email-cta{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      margin:2px 0 0;
+      font-size:clamp(16px, 1.8vw, 19px);
+      font-weight:800;
+      letter-spacing:-0.02em;
+      color:var(--text);
+      text-decoration:none;
+      border-bottom:2px solid var(--accent);
+      padding-bottom:2px;
+    }
+    .email-cta:hover{ border-bottom-color:var(--text); }
+
+    /* Big award date */
+    .award-date{
+      margin:0;
+      font-size:clamp(26px, 4vw, 40px);
+      font-weight:800;
+      letter-spacing:-0.03em;
+      line-height:1.1;
+    }
   </style>
 </head>
 <body>
@@ -59,7 +222,9 @@
   <div class="site-shell">
     <header class="top-nav" aria-label="Kopfbereich">
       <div class="container top-nav-inner">
-        <a href="index.html" class="brand" aria-label="ZWISCHENWELTEN Startseite">zwischenwelten</a>
+        <a href="index.html" class="brand" aria-label="ZWISCHENWELTEN Startseite">
+          <img src="ZW_logo.png" alt="ZWISCHENWELTEN">
+        </a>
 
         <nav aria-label="Hauptnavigation">
           <ul class="nav-links">
@@ -99,9 +264,9 @@
           <div class="prose-card">
             <div class="prose">
               <h2 id="ueber-preis">Über den Preis</h2>
-              <p>Der Zwischenwelten Medienpreis 2026 wird erstmals ausgeschrieben. Er zeichnet journalistische und mediale Beiträge aus, die sich mit der Frage beschäftigen, wie gesellschaftlicher Zusammenhalt, demokratische Teilhabe und friedliches Zusammenleben in einer vielfältigen Gesellschaft gelingen können.</p>
+              <p>Der Zwischenwelten Medienpreis 2026 wird erstmals ausgeschrieben. Er zeichnet journalistische und mediale Beiträge aus, die sich mit der Frage beschäftigen, wie gesellschaftlicher Zusammenhalt, demokratische Teilhabe und friedliches Zusammenleben in einer vielfältigen Gesellschaft ausgestaltet ist.</p>
               <p>Der Preis versteht sich als Beitrag zur Stärkung der demokratischen Öffentlichkeit. Er würdigt Medienschaffende, die unterschiedliche Perspektiven sichtbar machen, den gesellschaftlichen Dialog fördern und einen konstruktiven Beitrag zu einer respektvollen Debattenkultur leisten.</p>
-              <p>Im Mittelpunkt stehen nicht die Unterschiede zwischen Menschen, sondern die Frage, was sie verbindet, welche Herausforderungen das Zusammenleben mit sich bringt und welche Rolle Medien dabei spielen, Orientierung, Verständnis und Verständigung zu fördern.</p>
+              <p>Im Mittelpunkt stehen nicht die Unterschiede zwischen Menschen, sondern die Frage, was sie verbindet, welche Chancen und Herausforderungen das Zusammenleben mit sich bringt und welche Rolle Medien dabei spielen, Orientierung, Verständnis und Verständigung zu fördern.</p>
             </div>
           </div>
         </div>
@@ -113,9 +278,9 @@
           <div class="prose-card is-dark">
             <div class="prose">
               <h2 id="hintergrund">Hintergrund</h2>
-              <p>36 Jahre nach der deutschen Wiedervereinigung stellt sich die Frage nach dem gesellschaftlichen Zusammenhalt in neuer Form. Deutschland ist vielfältiger geworden. Unterschiedliche Lebenswelten, kulturelle Prägungen, religiöse Überzeugungen, soziale Erfahrungen und politische Sichtweisen prägen die öffentliche Debatte.</p>
-              <p>Medien spielen in diesem Zusammenhang eine zentrale Rolle. Sie informieren, ordnen ein, schaffen Öffentlichkeit und beeinflussen die Art und Weise, wie gesellschaftliche Gruppen wahrgenommen werden. Sie können Brücken bauen oder Gräben vertiefen, Verständigung fördern oder Polarisierung verstärken.</p>
-              <p>Der Zwischenwelten Medienpreis möchte Beiträge sichtbar machen, die einen konstruktiven Beitrag zum demokratischen Diskurs leisten und Wege zu einem respektvollen Miteinander aufzeigen.</p>
+              <p>36 Jahre nach der deutschen Wiedervereinigung stellt sich die Frage nach dem gesellschaftlichen Zusammenhalt in neuer Form. Deutschland ist vielfältiger geworden. Unterschiedliche Lebenswelten, kulturelle Prägungen, religiöse Überzeugungen, soziale Erfahrungen und politische Sichtweisen prägen die öffentliche Debatte – beginnend mit der Integration Ost-West.</p>
+              <p>Medien spielen in diesem Zusammenhang eine zentrale Rolle. Sie informieren, ordnen ein, schaffen Öffentlichkeit und erklären bestimmte Aspekte für relevant, und beeinflussen gleichzeitig die Art und Weise, wie gesellschaftliche Gruppen wahrgenommen werden. Sie können Brücken bauen oder Gräben ausheben, Verständigung fördern oder Polarisierung verstärken.</p>
+              <p>Der Zwischenwelten Medienpreis möchte Beiträge sichtbar machen, die einen konstruktiven Beitrag zum demokratischen Diskurs leisten und Wege zu einer respektvollen und konstruktiven Gesellschaftsentwicklung aufzeigen.</p>
             </div>
           </div>
         </div>
@@ -128,7 +293,7 @@
             <div class="prose">
               <h2 id="teilnahme">Wer kann teilnehmen?</h2>
               <p>Teilnahmeberechtigt sind:</p>
-              <ul>
+              <ul class="tag-cloud">
                 <li>Journalistinnen und Journalisten</li>
                 <li>Autorinnen und Autoren</li>
                 <li>Bloggerinnen und Blogger</li>
@@ -151,7 +316,7 @@
             <div class="prose">
               <h2 id="formate">Zugelassene Formate</h2>
               <p>Eingereicht werden können:</p>
-              <ul>
+              <ul class="tag-cloud">
                 <li>Zeitungs- und Magazinbeiträge</li>
                 <li>Online-Artikel</li>
                 <li>Reportagen</li>
@@ -170,23 +335,20 @@
       <!-- THEMATISCHE SCHWERPUNKTE -->
       <section class="section" aria-labelledby="schwerpunkte">
         <div class="container">
-          <div class="prose-card">
-            <div class="prose">
-              <h2 id="schwerpunkte">Thematische Schwerpunkte</h2>
-              <p>Gesucht werden Beiträge, die sich unter anderem mit folgenden Fragen beschäftigen:</p>
-              <ul>
-                <li>Was bedeutet gesellschaftlicher Zusammenhalt in einer vielfältigen Gesellschaft?</li>
-                <li>Welche Rolle spielen Medien für demokratische Öffentlichkeit und gesellschaftliche Teilhabe?</li>
-                <li>Wie gelingt Verständigung zwischen unterschiedlichen gesellschaftlichen Gruppen?</li>
-                <li>Welche Geschichten stärken Vertrauen, Respekt und Dialog?</li>
-                <li>Wie können Medien Polarisierung entgegenwirken?</li>
-                <li>Welche Perspektiven bleiben im öffentlichen Diskurs häufig unsichtbar?</li>
-                <li>Was heißt „deutschsein“ in einer postmigrantischen Gesellschaft?</li>
-                <li>Wie kann friedliche Koexistenz in einer pluralen Gesellschaft gelingen?</li>
-                <li>Was ist meine Vision von Deutschland 2050?</li>
-              </ul>
-            </div>
+          <div class="section-head">
+            <h2 class="section-title" id="schwerpunkte">Thematische Schwerpunkte</h2>
           </div>
+          <p class="page-lead" style="margin-top:0">Gesucht werden Beiträge, die sich unter anderem mit folgenden Fragen beschäftigen:</p>
+          <ul class="q-list">
+            <li>Was bedeutet Gemeinwohl und wie kann man es stärken?</li>
+            <li>Welche Rolle spielen Medien für demokratische Öffentlichkeit und gesellschaftliche Teilhabe?</li>
+            <li>Wie gelingt demokratische Meinungsbildung und Verständigung?</li>
+            <li>Welche Geschichten stärken Vertrauen, Respekt und Dialog?</li>
+            <li>Wie können Medien Polarisierung entgegenwirken?</li>
+            <li>Welche Perspektiven bleiben im öffentlichen Diskurs häufig unsichtbar?</li>
+            <li>Was heißt „deutschsein“ in einer postmigrantischen Gesellschaft?</li>
+            <li>Was ist meine Vision von Deutschland 2050?</li>
+          </ul>
         </div>
       </section>
 
@@ -198,7 +360,7 @@
               <h2 id="kriterien">Bewertungskriterien</h2>
               <p>Die Jury bewertet die Beiträge insbesondere nach folgenden Kriterien:</p>
               <ul>
-                <li>Journalistische Qualität</li>
+                <li>Journalistische Qualität (nach Ruß-Mohl)</li>
                 <li>Originalität und Kreativität</li>
                 <li>Gesellschaftliche Relevanz</li>
                 <li>Perspektivenvielfalt</li>
@@ -218,11 +380,23 @@
             <div class="prose">
               <h2 id="preise">Preise</h2>
               <p>Der Zwischenwelten Medienpreis 2026 ist mit insgesamt 3.000 Euro dotiert:</p>
-              <ul class="price-list">
-                <li><strong>🥇 1. Preis: 1.500 Euro</strong></li>
-                <li><strong>🥈 2. Preis: 1.000 Euro</strong></li>
-                <li><strong>🥉 3. Preis: 500 Euro</strong></li>
-              </ul>
+              <div class="podium">
+                <div class="podium-card silver">
+                  <span class="medal" aria-hidden="true">🥈</span>
+                  <span class="place">2. Preis</span>
+                  <span class="amount">1.000 Euro</span>
+                </div>
+                <div class="podium-card gold">
+                  <span class="medal" aria-hidden="true">🥇</span>
+                  <span class="place">1. Preis</span>
+                  <span class="amount">1.500 Euro</span>
+                </div>
+                <div class="podium-card bronze">
+                  <span class="medal" aria-hidden="true">🥉</span>
+                  <span class="place">3. Preis</span>
+                  <span class="amount">500 Euro</span>
+                </div>
+              </div>
               <p>Die Jury kann zusätzlich Anerkennungen oder lobende Erwähnungen aussprechen.</p>
             </div>
           </div>
@@ -237,13 +411,21 @@
               <h2 id="einreichung">Einreichung</h2>
 
               <h3>Einreichungszeitraum</h3>
-              <p><strong>Ausschreibungsbeginn:</strong> 15. Juni 2026</p>
-              <p><strong>Einsendeschluss:</strong> 15. September 2026</p>
-              <p>Zugelassen sind Beiträge, die zwischen dem 1. Januar 2025 und dem 31. August 2026 veröffentlicht wurden.</p>
+              <div class="date-grid">
+                <div class="date-card">
+                  <p class="date-label">Ausschreibungsbeginn</p>
+                  <p class="date-value">01. Juli 2026</p>
+                </div>
+                <div class="date-card">
+                  <p class="date-label">Einsendeschluss</p>
+                  <p class="date-value">15. September 2026</p>
+                </div>
+              </div>
+              <p>Zugelassen sind Beiträge, die zwischen dem 1. Januar 2025 und dem 15. September 2026 veröffentlicht wurden.</p>
 
               <h3>So reichen Sie ein</h3>
               <p>Bitte senden Sie Ihren Beitrag mit einer kurzen Beschreibung (max. 300 Wörter), Ihren Kontaktdaten sowie einem Nachweis des Berlin-Bezugs per E-Mail an:</p>
-              <p><strong><a href="mailto:medienpreis@zwischenwelten.berlin">medienpreis@zwischenwelten.berlin</a></strong></p>
+              <p><a class="email-cta" href="mailto:medienpreis@zwischenwelten.berlin">✉ medienpreis@zwischenwelten.berlin</a></p>
               <p>Für Rückfragen stehen wir gerne zur Verfügung.</p>
             </div>
           </div>
@@ -253,11 +435,36 @@
       <!-- JURY -->
       <section class="section" aria-labelledby="jury">
         <div class="container">
-          <div class="prose-card is-dark">
-            <div class="prose">
-              <h2 id="jury">Jury</h2>
-              <p>Die Beiträge werden von einer unabhängigen Jury aus den Bereichen Journalismus, Wissenschaft, Kultur und Zivilgesellschaft bewertet. Die Jury-Zusammensetzung wird vor Ablauf der Bewerbungsfrist auf dieser Seite bekanntgegeben.</p>
-            </div>
+          <div class="section-head">
+            <h2 class="section-title" id="jury">Jury</h2>
+          </div>
+          <p class="page-lead" style="margin-top:0">Die Beiträge werden von einer unabhängigen Jury aus den Bereichen Journalismus, Wissenschaft, Kultur und Zivilgesellschaft bewertet. Die Jury besteht aus:</p>
+
+          <div class="card-grid">
+            <article class="info-card">
+              <h3>Dominique Hensel</h3>
+              <p class="info-role">Chefredakteurin Brunnenmagazin</p>
+            </article>
+            <article class="info-card">
+              <h3>Süleyman Bağ</h3>
+              <p class="info-role">Projektleiter Zwischenwelten</p>
+            </article>
+            <article class="info-card">
+              <h3>Prof. Dr. Sabine Schiffer</h3>
+              <p class="info-role">Leiterin Institut für Medienverantwortung</p>
+            </article>
+            <article class="info-card">
+              <h3>Iskender Sezek</h3>
+              <p class="info-role">Exiljournalist</p>
+            </article>
+            <article class="info-card">
+              <h3>Kerstin Nickig</h3>
+              <p class="info-role">Dokumentarfilmerin</p>
+            </article>
+            <article class="info-card">
+              <h3>Bernd Lammel</h3>
+              <p class="info-role">Fotojournalist</p>
+            </article>
           </div>
         </div>
       </section>
@@ -268,7 +475,7 @@
           <div class="prose-card is-accent">
             <div class="prose">
               <h2 id="preisverleihung">Preisverleihung</h2>
-              <p class="award-line"><strong>3. Oktober 2026 – Tag der Deutschen Einheit</strong></p>
+              <p class="award-date"><strong>3. Oktober 2026 – Tag der Deutschen Einheit</strong></p>
               <p><em>Berlin</em></p>
             </div>
           </div>

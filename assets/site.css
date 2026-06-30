@@ -15,11 +15,11 @@
   --muted: #6d7278;
   --line: rgba(18,63,122,0.08);
   --line-strong: rgba(18,63,122,0.12);
-  --accent: #d9ef73;
-  --accent-dark: #c8e45a;
+  --accent: #e2851e;
+  --accent-dark: #c66f12;
   --map-blue: #123f7a;
   --map-soft: #93b5d7;
-  --map-green: #d9ef73;
+  --map-green: #e2851e;
   --warm: #f0d5b3;
   --rose: #e8bfb6;
   --white: #ffffff;
@@ -99,10 +99,17 @@ img{ max-width:100%; display:block; }
 }
 
 .brand{
+  display:inline-flex;
+  align-items:center;
   font-size:20px;
   font-weight:800;
   letter-spacing:-0.03em;
   color:var(--text);
+}
+.brand img{
+  height:64px;
+  width:auto;
+  display:block;
 }
 
 .nav-links{
@@ -464,6 +471,91 @@ img{ max-width:100%; display:block; }
   letter-spacing:0.02em;
   color:var(--text-soft);
 }
+
+/* ---------- JOIN / MITMACHEN CARDS ---------- */
+.join-grid{ margin-top:0; }
+
+.join-card{
+  position:relative;
+  overflow:hidden;
+  background:var(--white);
+  border:1px solid var(--line-strong);
+  border-radius:22px;
+  padding:28px 26px 26px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+
+.join-card::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:4px;
+  background:var(--accent);
+  transform:scaleY(0);
+  transform-origin:top;
+  transition:transform .25s ease;
+}
+
+.join-card:hover{
+  transform:translateY(-3px);
+  border-color:rgba(18,63,122,0.22);
+  box-shadow:0 18px 40px -24px rgba(18,63,122,0.45);
+}
+
+.join-card:hover::before{ transform:scaleY(1); }
+
+.join-num{
+  font-size:14px;
+  font-weight:700;
+  letter-spacing:0.08em;
+  color:var(--text);
+  background:var(--accent);
+  width:40px;
+  height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:12px;
+  margin-bottom:4px;
+}
+
+.join-card h3{
+  margin:0;
+  font-size:19px;
+  letter-spacing:-0.03em;
+  font-weight:700;
+  color:var(--text);
+  line-height:1.25;
+}
+
+.join-card p{
+  margin:0;
+  font-size:14px;
+  line-height:1.6;
+  color:#4f5964;
+}
+
+.join-note{
+  margin:26px 0 0;
+  max-width:60ch;
+  font-size:clamp(15px, 1.6vw, 16.5px);
+  line-height:1.6;
+  color:var(--text-soft);
+  font-weight:500;
+}
+.join-note a{
+  color:var(--text);
+  font-weight:700;
+  border-bottom:2px solid var(--accent);
+  text-decoration:none;
+  padding-bottom:1px;
+}
+.join-note a:hover{ border-bottom-color:var(--text); }
 
 /* ---------- CTA BUTTONS ---------- */
 .cta-row{

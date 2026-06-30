@@ -39,11 +39,11 @@
       --muted: #6d7278;
       --line: rgba(18,63,122,0.08);
       --line-strong: rgba(18,63,122,0.12);
-      --accent: #d9ef73;
+      --accent: #e2851e; //#d9ef73;
       --accent-dark: #c8e45a;
       --map-blue: #123f7a;
       --map-soft: #93b5d7;
-      --map-green: #d9ef73;
+      --map-green: #e2851e;
       --warm: #f0d5b3;
       --rose: #e8bfb6;
       --white: #ffffff;
@@ -124,10 +124,14 @@
     }
 
     .brand{
-      font-size:20px;
-      font-weight:800;
-      letter-spacing:-0.03em;
-      color:var(--text);
+      display:inline-flex;
+      align-items:center;
+    }
+
+    .brand img{
+      height:64px;
+      width:auto;
+      display:block;
     }
 
     .nav-links{
@@ -655,8 +659,10 @@
     .promo-sub{
       margin:2px 0 0;
       max-width:640px;
-      font-size:26px;
-      line-height:1.6;
+      font-size:clamp(22px, 3.4vw, 38px);
+      line-height:1;
+      letter-spacing:-0.035em;
+      font-weight:700;
       color:rgba(255,255,255,0.78);
     }
     .promo-link{
@@ -677,6 +683,9 @@
       .promo-title{
         font-size:clamp(18px, 5vw, 28px);
         white-space:normal;
+      }
+      .promo-sub{
+        font-size:clamp(18px, 5vw, 28px);
       }
     }
 
@@ -1507,6 +1516,51 @@
       background:var(--accent);
     }
 
+    /* PHILOSOPHIE */
+    .philosophy{
+      padding:40px 0 20px;
+    }
+
+    .philosophy-inner{
+      max-width:760px;
+    }
+
+    .philosophy-title{
+      max-width:20ch;
+      margin-bottom:22px;
+    }
+
+    .philosophy-text{
+      margin:0 0 16px;
+      font-size:16px;
+      line-height:1.75;
+      color:var(--text-soft);
+    }
+
+    .philosophy-link{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      margin-top:6px;
+      font-weight:700;
+      font-size:14px;
+      text-decoration:none;
+      color:var(--text);
+      padding-bottom:3px;
+      border-bottom:2px solid var(--accent);
+      transition:transform .2s ease, opacity .2s ease;
+    }
+
+    .philosophy-link span{
+      color:var(--accent);
+      font-size:11px;
+    }
+
+    .philosophy-link:hover{
+      opacity:0.85;
+      transform:translateX(2px);
+    }
+
     /* TRÄGERSCHAFT */
     .traegerschaft{
       padding:40px 0 60px;
@@ -1530,20 +1584,48 @@
       color:var(--text);
     }
 
-    .partners-grid{
-      display:grid;
-      grid-template-columns:repeat(3, 1fr);
-      gap:18px;
-    }
-
-    .partner-card{
+    .partners-box{
       background:var(--white);
       border:1px solid var(--line-strong);
       border-radius:22px;
-      padding:26px 24px 26px;
+      padding:26px 24px;
+    }
+
+    .partners-grid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:0;
+    }
+
+    .partner-card{
+      padding:6px 24px;
       display:flex;
       flex-direction:column;
       gap:10px;
+    }
+
+    .partner-card + .partner-card{
+      border-left:1px solid var(--line);
+    }
+
+    .partners-note{
+      margin:24px 0 0;
+      padding-top:20px;
+      border-top:1px solid var(--line);
+      font-size:13.5px;
+      line-height:1.6;
+      color:#4f5964;
+    }
+
+    .partners-note a{
+      color:var(--text);
+      font-weight:700;
+      text-decoration:underline;
+      text-underline-offset:2px;
+    }
+
+    .partners-note a:hover{
+      color:var(--brand, #123f7a);
     }
 
     .partner-tag{
@@ -1596,9 +1678,21 @@
         grid-template-columns:1fr;
       }
 
-      .goals-grid,
-      .partners-grid{
+      .goals-grid{
         grid-template-columns:repeat(2, 1fr);
+      }
+
+      .partners-grid{
+        grid-template-columns:1fr;
+      }
+
+      .partner-card{
+        padding:20px 6px;
+      }
+
+      .partner-card + .partner-card{
+        border-left:none;
+        border-top:1px solid var(--line);
       }
 
       .pillars-grid{
@@ -1745,7 +1839,9 @@
   <div class="site-shell">
     <header class="top-nav" aria-label="Kopfbereich">
       <div class="container top-nav-inner">
-        <a href="/" class="brand" aria-label="ZWISCHENWELTEN Startseite">zwischenwelten</a>
+        <a href="/" class="brand" aria-label="ZWISCHENWELTEN Startseite">
+          <img src="ZW_logo.png" alt="ZWISCHENWELTEN">
+        </a>
 
         <nav aria-label="Hauptnavigation">
           <ul class="nav-links">
@@ -1854,11 +1950,8 @@ Was entsteht, wenn Nachbarschaft auf Vielfalt trifft? Schau selbst.</p>
             </a>
 
             <a class="film-card" href="https://www.alex-berlin.de/videos/2178383-ehrenamt--mehr-teilhabe-in-der-stadtgesellschaft" target="_blank" rel="noopener noreferrer" aria-label="Reportage bei ALEX Berlin ansehen (öffnet in neuem Tab)">
-              <div class="film-thumb film-thumb-alex">
-                <div class="film-thumb-fallback" aria-hidden="true">
-                  <span class="alex-mark">ALEX<span>·</span>Berlin</span>
-                  <span class="alex-sub">Reportage · Ehrenamt</span>
-                </div>
+              <div class="film-thumb">
+                <img src="sbag-alex.png" alt="" loading="lazy">
                 <span class="film-source"><span class="dot" aria-hidden="true"></span>ALEX Berlin</span>
                 <span class="film-play" aria-hidden="true">
                   <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" focusable="false"><path d="M8 5v14l11-7z"/></svg>
@@ -1948,11 +2041,14 @@ Die ganze Sendung jetzt ansehen.</p>
               <h3>Zwischenwelten MeDialog – Konferenz 2027</h3>
               <p class="pillar-meta">Meine Einheit · Deine Einheit · Keine Einheit?</p>
               <p>
-                Ein multimediales Format zum Tag der Deutschen Einheit:
-                Reportagen, Kurzfilme und Podcasts machen plurale Perspektiven auf
-                Vielfalt und gesellschaftlichen Zusammenhalt sichtbar.
+                Wie kann Vertrauen zwischen Medienschaffenden und der muslimischen und migrantischen
+Zivilgesellschaft entstehen? Dieser Frage widmet sich der Zwischenwelten Medialog – eine
+Konferenz, die beide Seiten an einen Tisch bringt: Journalist:innen, Redaktionen und
+Medienmacher:innen auf der einen, Akteure aus Communities, Vereinen und
+zivilgesellschaftlichen Organisationen auf der anderen Seite.
+
               </p>
-              <a href="medialog.html" class="pillar-link">Zum Wettbewerb</a>
+              <a href="medialog.html" class="pillar-link">  Interesse bekunden &amp; Ideen einbringen</a>
               <span class="pillar-deco" aria-hidden="true"></span>
             </article>
 
@@ -1963,130 +2059,71 @@ Die ganze Sendung jetzt ansehen.</p>
       <!-- FEATURE: MEDIENWETTBEWERB -->
 
 
-      <!-- ÜBER DAS PROJEKT – APPROACH STATEMENT -->
-      <section class="approach" id="ueber" aria-labelledby="approach-title">
+
+
+      <!-- PHILOSOPHIE -->
+      <section class="philosophy" id="philosophie" aria-labelledby="philosophie-title">
         <div class="container">
-          <p class="section-eyebrow">Über das Projekt</p>
-          <div class="approach-grid">
-            <h2 class="big-word" id="approach-title">Wir erzählen Berlin <em>anders</em>.</h2>
-
-            <div class="approach-side">
-              <h3>Journalismus als Raum für Dialog und Teilhabe</h3>
-              <p>
-                ZWISCHENWELTEN stärkt Stimmen, die im öffentlichen Diskurs oft
-                unterrepräsentiert sind – durch mehrsprachige Formate
-                und redaktionelle Begleitung auf journalistischem Niveau.
-              </p>
-
-              <div class="stats">
-                <div class="stat">
-                  <strong>Mehrsprachig</strong>
-                  <span>Türkisch, Arabisch, Russisch, Kurdisch, Englisch, Deutsch (KI-unterstützte Übersetzung)</span>
-                </div>
-                <div class="stat">
-                  <strong>Dialogisch</strong>
-                  <span>Begegnungsräume statt Monolog</span>
-                </div>
-                <div class="stat">
-                  <strong>Lokal</strong>
-                  <span>Verankerung in Berliner Kiezen: Wedding, Gesundbrunnen, Berlin-Mitte</span>
-                </div>
-                <div class="stat">
-                  <strong>Professionell</strong>
-                  <span>Redaktionelle Standards und interkultureller Medienkodex</span>
-                </div>
-              </div>
-            </div>
+          <div class="philosophy-inner">
+            <p class="section-eyebrow">Zwischenwelten-Philosophie</p>
+            <h2 class="section-title philosophy-title" id="philosophie-title">Zwischenwelten – eine Philosophie des Dazwischen</h2>
+            <p class="philosophy-text">Metropolen wie Berlin sind Orte verdichteter Zwischenräume: Menschen leben und handeln
+zwischen Sprachen, kulturellen Referenzen, religiösen Deutungen und sozialen Milieus.
+ZWISCHENWELTEN steht nicht für Anpassung oder symbolische Repräsentation – sondern
+für die aktive Mitgestaltung der Berliner Medienöffentlichkeit durch Stimmen aus
+gesellschaftlichen Zwischenräumen. Vielfalt ist für uns keine Randnotiz, sondern eine
+zentrale gesellschaftliche Ressource. Journalismus verstehen wir als dialogisches Instrument:
+eines, das Austausch, Verständigung und Teilhabe fördert und gesellschaftliche
+Veränderungsprozesse sichtbar macht.</p>
+            <p class="philosophy-text">Mehr über das Projekt und über unseren Ansatz hier.</p>
+            <a href="ueber-uns.html#projektphilosophie" class="philosophy-link"><span aria-hidden="true">▶</span> Zur Zwischenwelten-Philosophie</a>
           </div>
         </div>
       </section>
-
-      <!-- ÜBER DAS PROJEKT – ZIELE -->
-      <section class="goals-section" aria-labelledby="goals-title">
-        <div class="container">
-          <div class="goals-head">
-            <h2 class="goals-title" id="goals-title">Zwischen kulturellen Räumen entstehen neue Öffentlichkeiten.</h2>
-            <p class="goals-intro">
-              ZWISCHENWELTEN ist ein interkulturelles Medien- und Bildungsprojekt an der Schnittstelle von Journalismus, Zivilgesellschaft und kultureller Bildung. Im Mittelpunkt steht aktive Mitgestaltung der Medienöffentlichkeit durch Menschen, deren Perspektiven bisher fehlen.
-            </p>
-          </div>
-
-          <p class="goals-subhead">Konkret bis Ende 2027:</p>
-
-          <div class="goals-grid">
-            <div class="goal">
-              <span class="goal-num">24+</span>
-              <p>kultursensible Texte im Brunnen Magazin</p>
-            </div>
-            <div class="goal">
-              <span class="goal-num">25</span>
-              <p>aktive Bürgerredakteur:innen mit diversen Hintergründen</p>
-            </div>
-            <div class="goal">
-              <span class="goal-num">15</span>
-              <p>Mitglieder im interkulturellen Journalistennetzwerk</p>
-            </div>
-            <div class="goal">
-              <span class="goal-num">1</span>
-              <p>Zwischenwelten-Konferenz (2027) für Medienschaffende und Community-Multiplikatoren</p>
-            </div>
-            <div class="goal">
-              <span class="goal-num">250</span>
-              <p>Kontakte im Newsletter-Verteiler</p>
-            </div>
-            <div class="goal">
-              <span class="goal-num">1</span>
-              <p>gemeinsamer Medienkodex für kultursensible Berichterstattung</p>
-            </div>
-          </div>
-
-          <p class="goals-footnote">
-            Das Projekt wird von Januar 2026 bis Dezember 2027 vom Berliner Senat für Kultur und Gesellschaftlichen Zusammenhalt gefördert.
-          </p>
-        </div>
-      </section>
-
-      
 
       <!-- TRÄGERSCHAFT & NETZWERK -->
       <section class="traegerschaft" id="traegerschaft" aria-labelledby="traegerschaft-title">
         <div class="container">
           <div class="traegerschaft-head">
             <div>
-              <p class="section-eyebrow">Trägerschaft &amp; Netzwerk</p>
+              <p class="section-eyebrow">Projektträger &amp; Partner</p>
             </div>
           </div>
 
-          <div class="partners-grid">
-            <article class="partner-card">
-              <span class="partner-tag">Projektträger</span>
-              <h3>Kubik e.V.</h3>
-              <p>KUBIK e.V. ist ein gemeinnütziger Verein aus Berlin-Wedding, der sich seit Jahren für
+          <div class="partners-box">
+            <div class="partners-grid">
+              <article class="partner-card">
+                <span class="partner-tag">Projektträger</span>
+                <h3>Kubik e.V.</h3>
+                <p>KUBIK e.V. ist ein gemeinnütziger Verein aus Berlin-Wedding, der sich seit Jahren für
 Bildung, Kultur und interkulturellen Dialog einsetzt. Mit seiner Wochenendschule, dem
 Ehrenamtszentrum und vielfältigen Begegnungsprogrammen schafft KUBIK offene Räume
 für Teilhabe in der Stadtgesellschaft. Als Hauptprojektträger von ZWISCHENWELTEN steht
 der Verein dafür, dass Vielfalt nicht verwaltet, sondern gelebt wird.</p>
-            </article>
+              </article>
 
-            <article class="partner-card">
-              <span class="partner-tag">Projektpartner</span>
-              <h3>Hensel und Schnell GbR</h3>
-              <p>Seit 2015 berichten Dominique Hensel und Andrei Schnell mit dem Brunnenmagazin über
+              <article class="partner-card">
+                <span class="partner-tag">Projektträger</span>
+                <h3>Hensel und Schnell GbR</h3>
+                <p>Seit 2015 berichten Dominique Hensel und Andrei Schnell mit dem Brunnenmagazin über
 Wedding und Gesundbrunnen – nah an den Menschen, Orten und Themen, die im Alltag oft
 übersehen werden. Viermal jährlich erscheint dazu ein gedrucktes Kiezmagazin, produziert
 von einer ehrenamtlichen Bürgerredaktion. Als Projektträger von ZWISCHENWELTEN
 öffnen sie den Journalismus für neue, interkulturelle Stimmen aus dem Kiez.</p>
-            </article>
+              </article>
 
-            <article class="partner-card">
-              <span class="partner-tag">Projektpartner</span>
-              <h3>Evangelische Kirchengemeinde am Gesundbrunnen</h3>
-              <p>Mittendrin im Kiez – so versteht sich die Evangelische Kirchengemeinde am Gesundbrunnen.
+              <article class="partner-card">
+                <span class="partner-tag">Projektträger</span>
+                <h3>Evangelische Kirchengemeinde am Gesundbrunnen</h3>
+                <p>Mittendrin im Kiez – so versteht sich die Evangelische Kirchengemeinde am Gesundbrunnen.
 Tief verwurzelt in einem der vielfältigsten Stadtteile Berlins, setzt sie sich neben der
 christlichen Religionsarbeit für Begegnung, Dialog und gesellschaftliche Verantwortung ein.
 Als Projektträgerin von ZWISCHENWELTEN bringt sie die Überzeugung ein, dass
 Verständigung über Glaubensgrenzen hinweg nicht nur möglich, sondern notwendig ist.</p>
-            </article>
+              </article>
+            </div>
+
+            <p class="partners-note">Berlinweit wirken acht weitere Institutionen aktiv an ZWISCHENWELTEN mit – über Bezirks- und Weltanschauungsgrenzen hinweg. <a href="ueber-uns.html#projektpartner">Mehr dazu</a></p>
           </div>
         </div>
       </section>
