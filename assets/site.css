@@ -646,7 +646,7 @@ img{ max-width:100%; display:block; }
 }
 
 :focus-visible{
-  outline:3px solid rgba(217,239,115,0.85);
+  outline:3px solid rgba(18,63,122,0.55);
   outline-offset:3px;
   border-radius:10px;
 }

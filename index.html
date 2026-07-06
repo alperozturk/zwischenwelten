@@ -26,6 +26,7 @@
   <meta name="twitter:image" content="https://www.example.org/assets/og-image.jpg">
 
   <link rel="stylesheet" href="assets/fonts.css">
+  <link rel="stylesheet" href="assets/consent.css">
 
   <style>
     :root{
@@ -38,7 +39,7 @@
       --line: rgba(18,63,122,0.08);
       --line-strong: rgba(18,63,122,0.12);
       --accent: #e2851e; //#d9ef73;
-      --accent-dark: #c8e45a;
+      --accent-dark: #c66f12;
       --map-blue: #123f7a;
       --map-soft: #93b5d7;
       --map-green: #e2851e;
@@ -1247,7 +1248,7 @@
     }
 
     :focus-visible{
-      outline:3px solid rgba(217,239,115,0.85);
+      outline:3px solid rgba(18,63,122,0.55);
       outline-offset:3px;
       border-radius:10px;
     }
@@ -1925,7 +1926,7 @@ deren Perspektiven bisher kaum vorkommen.</p>
           <div class="films-grid">
             <a class="film-card" href="https://www.youtube.com/watch?v=T50Ep0B75wk" target="_blank" rel="noopener noreferrer" aria-label="Projektfilm auf YouTube ansehen (öffnet in neuem Tab)">
               <div class="film-thumb">
-                <img src="https://i.ytimg.com/vi/T50Ep0B75wk/hqdefault.jpg" alt="" loading="lazy" width="480" height="360">
+                <img src="assets/projektfilm-thumb.jpg" alt="" loading="lazy" width="480" height="360">
                 <span class="film-source"><span class="dot" aria-hidden="true"></span>YouTube</span>
                 <span class="film-play" aria-hidden="true">
                   <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" focusable="false"><path d="M8 5v14l11-7z"/></svg>
@@ -2149,5 +2150,6 @@ Verständigung über Glaubensgrenzen hinweg nicht nur möglich, sondern notwendi
       </div>
     </footer>
   </div>
+  <script src="assets/consent.js" defer></script>
 </body>
 </html>
