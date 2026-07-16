@@ -176,7 +176,7 @@
       '<p>Wir verwenden neben technisch notwendigen Speicherfunktionen optional externe Medien ' +
       '(z. B. YouTube). Diese Inhalte werden erst geladen, wenn Sie einwilligen. ' +
       'Ihre Auswahl können Sie jederzeit über „Cookie-Einstellungen“ im Fußbereich ändern. ' +
-      'Mehr dazu in unserer <a href="datenschutz.html">Datenschutzerklärung</a>.</p>' +
+      'Mehr dazu in unserer <a href="/datenschutz">Datenschutzerklärung</a>.</p>' +
       '<div class="zw-consent-actions">' +
       '<button type="button" class="zw-btn zw-btn-accent" data-action="accept-all">Alle akzeptieren</button>' +
       '<button type="button" class="zw-btn zw-btn-ghost" data-action="necessary-only">Nur notwendige</button>' +
@@ -230,7 +230,7 @@
     m.innerHTML =
       '<h2 id="zw-modal-title">Cookie-Einstellungen</h2>' +
       "<p>Hier können Sie festlegen, welche Kategorien Sie zulassen möchten. " +
-      'Details finden Sie in unserer <a href="datenschutz.html">Datenschutzerklärung</a>.</p>' +
+      'Details finden Sie in unserer <a href="/datenschutz">Datenschutzerklärung</a>.</p>' +
       '<div class="zw-consent-cats">' + catsHtml + "</div>" +
       '<div class="zw-consent-actions">' +
       '<button type="button" class="zw-btn zw-btn-accent" data-action="save">Auswahl speichern</button>' +
