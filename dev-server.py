@@ -27,5 +27,15 @@ class CleanUrlHandler(http.server.SimpleHTTPRequestHandler):
 
 
 if __name__ == "__main__":
+    try:
+        server = http.server.ThreadingHTTPServer(("127.0.0.1", PORT), CleanUrlHandler)
+    except OSError:
+        raise SystemExit(
+            f"Port {PORT} is already in use — most likely by a plain "
+            f"`python3 -m http.server`, which cannot serve clean URLs like "
+            f"/aktuelles/medienpreis-2026 and will return 404 for them.\n"
+            f"Stop it first:  pkill -f http.server\n"
+            f"Then run this script again."
+        )
     print(f"Serving on http://localhost:{PORT} (Ctrl+C to stop)")
-    http.server.ThreadingHTTPServer(("127.0.0.1", PORT), CleanUrlHandler).serve_forever()
+    server.serve_forever()
