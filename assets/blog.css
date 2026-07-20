@@ -1,0 +1,331 @@
+/* =====================================================================
+   ZWISCHENWELTEN – blog article styles
+   Shared by all posts under /aktuelles/. Builds on assets/site.css.
+   ===================================================================== */
+
+/* ---------- ARTICLE HERO ---------- */
+.article-hero{
+  padding:40px 0 10px;
+}
+
+.article-meta{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:10px;
+  margin:0 0 16px;
+}
+
+.article-tag{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--text);
+  background:var(--accent);
+  padding:6px 12px;
+  border-radius:999px;
+}
+
+.article-meta-line{
+  font-size:12px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  font-weight:600;
+  color:var(--text-soft);
+}
+
+.article-meta-line .sep{ color:var(--accent); padding:0 4px; }
+
+.article-title{
+  margin:0;
+  font-size:clamp(36px, 5.4vw, 62px);
+  line-height:1.06;
+  letter-spacing:-0.05em;
+  font-weight:800;
+  max-width:20ch;
+}
+
+.article-title em{
+  font-style:normal;
+  background:var(--accent);
+  padding:0 .15em;
+  border-radius:.1em;
+  box-decoration-break:clone;
+  -webkit-box-decoration-break:clone;
+}
+
+.article-subtitle{
+  margin:18px 0 0;
+  max-width:56ch;
+  font-size:clamp(17px, 2vw, 21px);
+  line-height:1.45;
+  font-weight:600;
+  color:var(--text-soft);
+  letter-spacing:-0.01em;
+}
+
+/* ---------- COVER ---------- */
+.article-cover{
+  padding:28px 0 8px;
+}
+
+.article-cover figure{
+  margin:0;
+}
+
+.article-cover img{
+  width:100%;
+  height:auto;
+  border-radius:22px;
+  border:1px solid var(--line-strong);
+  box-shadow:0 24px 48px -24px rgba(18,63,122,0.35);
+}
+
+.article-cover figcaption{
+  margin:12px 4px 0;
+  font-size:12.5px;
+  color:var(--muted);
+  font-style:italic;
+}
+
+/* ---------- ARTICLE BODY ---------- */
+.article-body{
+  padding:26px 0 40px;
+}
+
+.article-card{
+  background:var(--white);
+  border:1px solid var(--line-strong);
+  border-radius:28px;
+  padding:44px clamp(24px, 5vw, 64px) 48px;
+  position:relative;
+  overflow:hidden;
+}
+
+.article-card::before{
+  content:"";
+  position:absolute;
+  width:320px;
+  height:320px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(226,133,30,.10), transparent 65%);
+  top:-160px;
+  right:-120px;
+  pointer-events:none;
+}
+
+.article-prose{
+  position:relative;
+  z-index:1;
+  max-width:70ch;
+  margin-inline:auto;
+}
+
+.article-prose > p:first-of-type{
+  font-size:16.5px;
+  line-height:1.75;
+  color:var(--text-soft);
+  font-weight:500;
+}
+
+.article-prose p{
+  margin:0 0 18px;
+  font-size:15px;
+  line-height:1.8;
+  color:#4f5964;
+}
+
+.article-prose strong{ color:var(--text); }
+
+.article-prose a{
+  color:var(--text);
+  font-weight:600;
+  border-bottom:1px solid rgba(18,63,122,.35);
+}
+.article-prose a:hover{ border-bottom-color:var(--text); }
+
+.article-prose h2{
+  margin:40px 0 14px;
+  font-size:clamp(24px, 3vw, 32px);
+  line-height:1.1;
+  letter-spacing:-0.04em;
+  font-weight:700;
+  color:var(--text);
+}
+
+.article-prose ul{
+  list-style:none;
+  margin:0 0 18px;
+  padding:0;
+  display:grid;
+  gap:10px;
+}
+
+.article-prose ul li{
+  font-size:14.5px;
+  line-height:1.65;
+  color:#4f5964;
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+}
+
+.article-prose ul li::before{
+  content:"";
+  flex-shrink:0;
+  margin-top:9px;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--text);
+}
+
+/* Pull quotes */
+.pull-quote{
+  margin:30px 0;
+  padding:26px 28px 24px;
+  background:var(--canvas);
+  border:1px solid var(--line-strong);
+  border-left:4px solid var(--accent);
+  border-radius:18px;
+}
+
+.pull-quote p{
+  margin:0 0 12px;
+  font-size:16.5px;
+  line-height:1.6;
+  font-weight:600;
+  letter-spacing:-0.01em;
+  color:var(--text);
+}
+
+.pull-quote cite{
+  display:block;
+  font-style:normal;
+  font-size:13px;
+  color:var(--text-soft);
+}
+
+.pull-quote cite strong{
+  display:block;
+  font-size:14px;
+  color:var(--text);
+  margin-bottom:2px;
+}
+
+/* Prize row */
+.prize-row{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:14px;
+  margin:8px 0 20px;
+}
+
+.prize-card{
+  background:var(--canvas);
+  border:1px solid var(--line-strong);
+  border-radius:16px;
+  padding:18px 18px 16px;
+  text-align:center;
+}
+
+.prize-card .place{
+  display:block;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--text-soft);
+  margin-bottom:6px;
+}
+
+.prize-card .amount{
+  display:block;
+  font-size:clamp(20px, 2.4vw, 26px);
+  font-weight:800;
+  letter-spacing:-0.03em;
+  color:var(--text);
+}
+
+.prize-card.is-first{
+  background:var(--accent);
+  border-color:var(--accent);
+}
+.prize-card.is-first .place{ color:var(--text); }
+
+/* Fact box (Bewerbung) */
+.fact-box{
+  margin:26px 0;
+  padding:26px 28px;
+  background:var(--text);
+  color:#f4f1e9;
+  border-radius:18px;
+}
+
+.fact-box h3{
+  margin:0 0 12px;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--accent);
+}
+
+.fact-box p{
+  margin:0 0 8px;
+  font-size:14.5px;
+  line-height:1.7;
+  color:rgba(244,241,233,.88);
+}
+
+.fact-box p:last-child{ margin-bottom:0; }
+
+.fact-box strong{ color:#fff; }
+
+.fact-box a{
+  color:var(--accent);
+  font-weight:700;
+  border-bottom:1px solid rgba(226,133,30,.5);
+}
+
+/* Footer of article */
+.article-back{
+  margin-top:36px;
+  padding-top:22px;
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:14px;
+}
+
+.article-author{
+  font-size:13px;
+  color:var(--text-soft);
+}
+
+.article-author strong{ color:var(--text); }
+
+.back-link{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-weight:700;
+  font-size:14px;
+  color:var(--text);
+  padding-bottom:2px;
+  border-bottom:2px solid var(--accent);
+  transition:transform .2s ease, opacity .2s ease;
+}
+
+.back-link:hover{ opacity:.85; transform:translateX(-2px); }
+
+@media (max-width:760px){
+  .prize-row{ grid-template-columns:1fr; }
+  .article-card{ padding:30px 22px 34px; }
+}
