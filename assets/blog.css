@@ -284,6 +284,20 @@
 
 .fact-box p:last-child{ margin-bottom:0; }
 
+.fact-box ul{
+  margin:0 0 10px;
+}
+
+.fact-box ul li{
+  color:rgba(244,241,233,.88);
+}
+
+.fact-box ul li::before{
+  background:var(--accent);
+}
+
+.fact-box > :last-child{ margin-bottom:0; }
+
 .fact-box strong{ color:#fff; }
 
 .fact-box a{
