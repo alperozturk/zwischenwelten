@@ -1,0 +1,766 @@
+#!/usr/bin/env python3
+"""Publish a markdown manuscript as a ZWISCHENWELTEN blog post.
+
+Converts a .md file into a post that matches the house style (assets/blog.css),
+copies the cover image, registers the author, and adds a card to /aktuelles.
+
+The conversion is deliberately verbatim: headings, paragraphs, lists and quotes
+change shape, never wording. Before writing anything the script compares the
+manuscript against the generated page word by word and refuses to publish when
+they differ, so a post can never silently drift from its source.
+
+    python3 scripts/publish_post.py --md post.md --image cover.jpg --lang de
+
+Run with --help for all options.
+"""
+
+import argparse
+import difflib
+import html as htmllib
+import json
+import os
+import re
+import shutil
+import struct
+import sys
+import unicodedata
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+POSTS_DIR = os.path.join(ROOT, "aktuelles")
+INDEX = os.path.join(POSTS_DIR, "index.html")
+IMG_DIR = os.path.join(ROOT, "assets", "blog")
+AUTHORS = os.path.join(IMG_DIR, "authors.json")
+SITE = "https://zwischenwelten-berlin.de"
+
+# --------------------------------------------------------------------------
+# Language table. Every string here is site chrome, never manuscript content.
+# --------------------------------------------------------------------------
+MONTHS = {
+    "de": "Januar Februar März April Mai Juni Juli August September Oktober November Dezember".split(),
+    "en": "January February March April May June July August September October November December".split(),
+    "tr": "Ocak Şubat Mart Nisan Mayıs Haziran Temmuz Ağustos Eylül Ekim Kasım Aralık".split(),
+    "ru": "января февраля марта апреля мая июня июля августа сентября октября ноября декабря".split(),
+    "uk": "січня лютого березня квітня травня червня липня серпня вересня жовтня листопада грудня".split(),
+    "ar": "يناير فبراير مارس أبريل مايو يونيو يوليو أغسطس سبتمبر أكتوبر نوفمبر ديسمبر".split(),
+    "ku": "Rêbendan Reşemî Adar Avrêl Gulan Pûşper Tîrmeh Gelawêj Rezber Kewçêr Sermawez Berfanbar".split(),
+}
+
+LANGS = {
+    "de": dict(label="Deutsch", locale="de_DE", rtl=False, date="{d}. {m} {y}",
+               read_more="Weiterlesen", back="Zurück zu Aktuelles",
+               by="Autor", published="Veröffentlicht am", quotes=("„", "“")),
+    "en": dict(label="English", locale="en_GB", rtl=False, date="{d} {m} {y}",
+               read_more="Read more", back="Back to news",
+               by="Author", published="Published", quotes=("“", "”")),
+    "tr": dict(label="Türkçe", locale="tr_TR", rtl=False, date="{d} {m} {y}",
+               read_more="Devamını oku", back="Haberlere dön",
+               by="Yazar", published="tarihinde yayımlandı", quotes=("“", "”")),
+    "ru": dict(label="Русский", locale="ru_RU", rtl=False, date="{d} {m} {y}",
+               read_more="Читать далее", back="Назад к новостям",
+               by="Автор", published="Опубликовано", quotes=("«", "»")),
+    "uk": dict(label="Українська", locale="uk_UA", rtl=False, date="{d} {m} {y}",
+               read_more="Читати далі", back="Назад до новин",
+               by="Автор", published="Опубліковано", quotes=("«", "»")),
+    "ar": dict(label="العربية", locale="ar_AR", rtl=True, date="{d} {m} {y}",
+               read_more="اقرأ المزيد", back="العودة إلى الأخبار",
+               by="الكاتب", published="نُشر في", quotes=("«", "»")),
+    "ku": dict(label="Kurdî", locale="ku_TR", rtl=False, date="{d} {m} {y}",
+               read_more="Zêdetir bixwîne", back="Vegere nûçeyan",
+               by="Nivîskar", published="Hatiye weşandin", quotes=("“", "”")),
+}
+
+# Order of chips in the overview filter.
+CHIP_ORDER = ["de", "en", "tr", "ru", "uk", "ar", "ku"]
+
+
+def die(msg):
+    sys.exit(f"\n✗ {msg}\n")
+
+
+def info(msg):
+    print(f"  {msg}")
+
+
+# --------------------------------------------------------------------------
+# Author registry
+# --------------------------------------------------------------------------
+CYR = {
+    "а": "a", "б": "b", "в": "v", "г": "g", "ґ": "g", "д": "d", "е": "e", "є": "ye",
+    "ж": "zh", "з": "z", "и": "i", "і": "i", "ї": "yi", "й": "y", "к": "k", "л": "l",
+    "м": "m", "н": "n", "о": "o", "п": "p", "р": "r", "с": "s", "т": "t", "у": "u",
+    "ф": "f", "х": "h", "ц": "ts", "ч": "ch", "ш": "sh", "щ": "sch", "ъ": "", "ы": "y",
+    "ь": "", "э": "e", "ю": "yu", "я": "ya", "ё": "e",
+}
+
+
+def fold(name):
+    """Reduce a name to a comparable ASCII skeleton (diacritics, Cyrillic, case)."""
+    s = name.strip().lower()
+    s = "".join(CYR.get(ch, ch) for ch in s)
+    s = unicodedata.normalize("NFKD", s)
+    s = "".join(c for c in s if not unicodedata.combining(c))
+    s = s.replace("ğ", "g").replace("ı", "i").replace("ş", "s").replace("ö", "o")
+    s = s.replace("ü", "u").replace("ç", "c").replace("ß", "ss")
+    return re.sub(r"[^a-z ]", "", s).strip()
+
+
+def load_authors():
+    with open(AUTHORS, encoding="utf-8") as fh:
+        return json.load(fh)
+
+
+def match_author(name, registry):
+    """Return (entry, score) for the closest known author, or (None, best_score)."""
+    target = fold(name)
+    best, best_score = None, 0.0
+    for entry in registry["authors"]:
+        candidates = [entry["canonical"], *entry.get("aliases", []), *entry.get("names", {}).values()]
+        for cand in candidates:
+            score = difflib.SequenceMatcher(None, target, fold(cand)).ratio()
+            if score > best_score:
+                best, best_score = entry, score
+    return (best, best_score) if best_score >= 0.85 else (None, best_score)
+
+
+BYLINE = re.compile(
+    r"^\s*(?:\*{0,3})\s*(?:author|by|autor|autorin|yazar|автор|нивîskar|nivîskar|الكاتب)\s*[::]\s*(.+?)\s*(?:\*{0,3})\s*$",
+    re.I | re.M,
+)
+
+
+def find_author_in_md(text):
+    """Pull an explicit byline out of the manuscript, if it has one."""
+    m = BYLINE.search(text)
+    if not m:
+        return None
+    name = re.sub(r"[*_]", "", m.group(1)).strip().rstrip(".,")
+    return name or None
+
+
+# --------------------------------------------------------------------------
+# Markdown -> house-style HTML
+# --------------------------------------------------------------------------
+def esc(s):
+    return htmllib.escape(s, quote=False)
+
+
+def smart_quotes(text, open_q, close_q):
+    """Straight quotes -> paired typographic quotes, decided by context.
+
+    Alternating open/close breaks when a passage already uses typographic marks,
+    so each quote is judged by what precedes it instead.
+    """
+    out = []
+    for i, ch in enumerate(text):
+        if ch == '"':
+            prev = text[i - 1] if i else ""
+            out.append(open_q if (not prev or prev in " \t\n([{—–-„«“") else close_q)
+        else:
+            out.append(ch)
+    return "".join(out)
+
+
+def inline(text, lang):
+    """Inline markdown -> HTML. Typography changes; wording does not."""
+    open_q, close_q = LANGS[lang]["quotes"]
+    text = esc(text)
+    # links first so their text is not mangled
+    links = []
+
+    def stash(m):
+        links.append((m.group(1), m.group(2)))
+        return f"\x00{len(links)-1}\x00"
+
+    text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", stash, text)
+    text = re.sub(r"\*\*\*(.+?)\*\*\*", r"<strong>\1</strong>", text)
+    text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text)
+    text = re.sub(r"(?<!\*)\*([^*]+)\*(?!\*)", r"<em>\1</em>", text)
+    # dashes: --- em, -- en
+    text = text.replace("---", "—").replace("--", "–")
+    text = smart_quotes(text, open_q, close_q)
+    # bare e-mail addresses become links (trailing punctuation stays outside)
+    text = re.sub(r"(?<![\w:>@.])([\w.+-]+@[\w-]+(?:\.[\w-]+)+)",
+                  r'<a href="mailto:\1">\1</a>', text)
+    for i, (label, url) in enumerate(links):
+        href = url.strip()
+        text = text.replace(f"\x00{i}\x00", f'<a href="{href}">{label}</a>')
+    return text
+
+
+def split_attribution(line):
+    """'--- Name, role' / '***Name** — role*' -> (name, role)."""
+    s = re.sub(r"[*_]", "", line.strip())          # emphasis first…
+    s = re.sub(r"^\s*[—–-]{1,3}\s*", "", s).strip()  # …then the leading dash
+    for sep in [",", "—", "–", " - ", "|"]:
+        if sep in s:
+            name, role = s.split(sep, 1)
+            return name.strip(), role.strip()
+    return s, ""
+
+
+def md_to_blocks(md, lang):
+    """Convert the manuscript body into the site's article markup."""
+    lines = md.split("\n")
+    out, i = [], 0
+    ind = " " * 16
+
+    while i < len(lines):
+        raw = lines[i]
+        line = raw.strip()
+
+        if not line:
+            i += 1
+            continue
+
+        # thematic break
+        if re.fullmatch(r"(\*\s*){3,}|(-\s*){3,}|(_\s*){3,}", line):
+            i += 1
+            continue
+
+        # headings
+        m = re.match(r"^(#{2,6})\s+(.*)$", line)
+        if m:
+            level = min(len(m.group(1)), 3)
+            out.append(f"{ind}<h{level}>{inline(m.group(2).strip(), lang)}</h{level}>")
+            i += 1
+            continue
+
+        # blockquote -> pull quote
+        if line.startswith(">"):
+            block = []
+            while i < len(lines) and (lines[i].strip().startswith(">") or not lines[i].strip()):
+                if not lines[i].strip():
+                    if i + 1 < len(lines) and lines[i + 1].strip().startswith(">"):
+                        block.append("")
+                        i += 1
+                        continue
+                    break
+                block.append(re.sub(r"^\s*>\s?", "", lines[i]).rstrip())
+                i += 1
+            chunks = [c.strip() for c in "\n".join(block).split("\n") if c.strip()]
+            if not chunks:
+                continue
+            attribution = ""
+            if len(chunks) > 1 and re.match(r"^\s*(?:[—–-]{1,3}|\*{1,3}\s*[—–-]{1,3})", chunks[-1]):
+                attribution = chunks.pop()
+            elif len(chunks) > 1 and re.fullmatch(r"\*{2,3}.+\*{2,3}", chunks[-1]):
+                attribution = chunks.pop()
+            body = " ".join(chunks)
+            block = [f'{ind}<blockquote class="pull-quote">',
+                     f"{ind}  <p>{inline(body, lang)}</p>"]
+            if attribution:
+                name, role = split_attribution(attribution)
+                cite = f"<strong>{inline(name, lang)}</strong>"
+                if role:
+                    cite += inline(role, lang)
+                block.append(f"{ind}  <cite>{cite}</cite>")
+            block.append(f"{ind}</blockquote>")
+            out.append("\n".join(block))
+            continue
+
+        # table
+        if line.startswith("|") and i + 1 < len(lines) and \
+                re.fullmatch(r"\|[\s:|-]+\|", lines[i + 1].strip()):
+            def cells(row):
+                return [c.strip() for c in row.strip().strip("|").split("|")]
+            header = cells(lines[i])
+            i += 2
+            rows = []
+            while i < len(lines) and lines[i].strip().startswith("|"):
+                rows.append(cells(lines[i]))
+                i += 1
+            block = [f'{ind}<div class="table-wrap">', f"{ind}  <table>", f"{ind}    <thead>",
+                     f"{ind}      <tr>"]
+            block += [f"{ind}        <th>{inline(c, lang)}</th>" for c in header]
+            block += [f"{ind}      </tr>", f"{ind}    </thead>", f"{ind}    <tbody>"]
+            for r in rows:
+                block.append(f"{ind}      <tr>")
+                block += [f"{ind}        <td>{inline(c, lang)}</td>" for c in r]
+                block.append(f"{ind}      </tr>")
+            block += [f"{ind}    </tbody>", f"{ind}  </table>", f"{ind}</div>"]
+            out.append("\n".join(block))
+            continue
+
+        # list
+        if re.match(r"^[-*+]\s+", line):
+            items = []
+            while i < len(lines) and re.match(r"^\s*[-*+]\s+", lines[i]):
+                items.append(re.sub(r"^\s*[-*+]\s+", "", lines[i]).strip())
+                i += 1
+            block = [f"{ind}<ul>"]
+            block += [f"{ind}  <li>{inline(it, lang)}</li>" for it in items]
+            block.append(f"{ind}</ul>")
+            out.append("\n".join(block))
+            continue
+
+        # paragraph (join wrapped lines)
+        para = []
+        while i < len(lines) and lines[i].strip() and not re.match(
+                r"^\s*(#{2,6}\s|>|[-*+]\s)", lines[i]):
+            para.append(lines[i].strip())
+            i += 1
+        out.append(f"{ind}<p>{inline(' '.join(para), lang)}</p>")
+
+    return "\n\n".join(out)
+
+
+def parse_md(path, lang, subtitle_mode="auto"):
+    text = open(path, encoding="utf-8").read().replace("\r\n", "\n")
+    text = BYLINE.sub("", text)  # byline is metadata, not body copy
+
+    m = re.search(r"^#\s+(.*)$", text, re.M)
+    if not m:
+        die("The manuscript has no '# Title' line.")
+    title = m.group(1).strip()
+    rest = text[m.end():].lstrip("\n")
+
+    subtitle = ""
+    if subtitle_mode != "none":
+        first = rest.split("\n\n", 1)[0].strip()
+        italic = re.fullmatch(r"\*(.+)\*", first) or re.fullmatch(r"_(.+)_", first)
+        heading = re.fullmatch(r"##\s+(.*)", first)
+        if italic and subtitle_mode in ("auto", "italic"):
+            subtitle = italic.group(1).strip()
+            rest = rest.split("\n\n", 1)[1] if "\n\n" in rest else ""
+        elif heading and subtitle_mode in ("auto", "heading"):
+            subtitle = heading.group(1).strip()
+            rest = rest.split("\n\n", 1)[1] if "\n\n" in rest else ""
+
+    return title, subtitle, rest
+
+
+# --------------------------------------------------------------------------
+# Fidelity gate — the manuscript and the page must contain the same words
+# --------------------------------------------------------------------------
+def words(text):
+    t = htmllib.unescape(text)
+    t = re.sub(r"\S*@\S*\.\w+\S*", " EMAIL ", t)
+    t = re.sub(r"^\s*\|[\s:|-]+\|\s*$", " ", t, flags=re.M)   # table rule row
+    t = t.replace("|", " ")
+    t = t.replace("---", "—").replace("--", "—").replace("–", "—")
+    for q in ['"', "„", "“", "”", "«", "»", "‟", "‚", "‘", "’", "'"]:
+        t = t.replace(q, "'")
+    t = t.replace(" ", " ")
+    t = re.sub(r"[*#>`\[\]_]", " ", t)
+    t = re.sub(r"^\s*[-•+*]\s*", " ", t, flags=re.M)
+    t = re.sub(r"\(mailto:[^)]*\)", " ", t)
+    t = re.sub(r"\(https?://[^)]*\)", " ", t)
+    t = re.sub(r"[,.;:!?()]", " ", t)
+    t = re.sub(r"\s—\s", " ", t)          # attribution dash is styling
+    return re.sub(r"\s+", " ", t).strip().lower().split()
+
+
+def check_fidelity(md_path, page_html):
+    src = open(md_path, encoding="utf-8").read()
+    src = BYLINE.sub("", src)
+    body = re.search(r'<div class="article-prose">(.*?)<div class="article-back">',
+                     page_html, re.S)
+    title = re.search(r'<h1 class="article-title"[^>]*>(.*?)</h1>', page_html, re.S)
+    sub = re.search(r'<p class="article-subtitle">(.*?)</p>', page_html, re.S)
+    rendered = " ".join(re.sub(r"<[^>]+>", " ", m.group(1)) if m else ""
+                        for m in (title, sub, body))
+    a, b = words(src), words(rendered)
+    diffs = [op for op in difflib.SequenceMatcher(None, a, b, autojunk=False).get_opcodes()
+             if op[0] != "equal"]
+    return a, b, diffs
+
+
+# --------------------------------------------------------------------------
+# Image
+# --------------------------------------------------------------------------
+def image_size(path):
+    with open(path, "rb") as fh:
+        head = fh.read(32)
+        if head[:8] == b"\x89PNG\r\n\x1a\n":
+            w, h = struct.unpack(">II", head[16:24])
+            return w, h
+        if head[:2] == b"\xff\xd8":
+            fh.seek(2)
+            while True:
+                b = fh.read(1)
+                while b and b != b"\xff":
+                    b = fh.read(1)
+                marker = fh.read(1)
+                if not marker:
+                    break
+                if marker[0] in range(0xC0, 0xCF) and marker[0] not in (0xC4, 0xC8, 0xCC):
+                    fh.read(3)
+                    h, w = struct.unpack(">HH", fh.read(4))
+                    return w, h
+                size = struct.unpack(">H", fh.read(2))[0]
+                fh.seek(size - 2, 1)
+    return None, None
+
+
+# --------------------------------------------------------------------------
+# Page + card rendering
+# --------------------------------------------------------------------------
+PAGE = """<!DOCTYPE html>
+<html lang="{lang}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{title_plain} – ZWISCHENWELTEN</title>
+  <meta name="description" content="{description}">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#123f7a">
+  <meta name="color-scheme" content="light">
+
+  <link rel="icon" href="/favicon.ico">
+
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="{locale}">
+  <meta property="og:site_name" content="ZWISCHENWELTEN">
+  <meta property="og:title" content="{title_plain}">
+  <meta property="og:description" content="{description}">
+  <meta property="og:image" content="{site}{cover}">
+
+  <link rel="stylesheet" href="/assets/fonts.css">
+  <link rel="stylesheet" href="/assets/consent.css">
+
+  <link rel="stylesheet" href="/assets/site.css">
+  <link rel="stylesheet" href="/assets/blog.css">
+
+  <script type="application/ld+json">
+  {{
+    "@context":"https://schema.org",
+    "@type":"NewsArticle",
+    "headline":"{title_plain}",
+    "description":"{description}",
+    "image":"{site}{cover}",
+    "datePublished":"{iso_date}",
+    "inLanguage":"{lang}",
+    "author":{{
+      "@type":"Person",
+      "name":"{author}"
+    }},
+    "publisher":{{
+      "@type":"Organization",
+      "name":"ZWISCHENWELTEN"
+    }}
+  }}
+  </script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Zum Inhalt springen</a>
+
+  <div class="site-shell">
+    <header class="top-nav" aria-label="Kopfbereich">
+      <div class="container top-nav-inner">
+        <a href="/" class="brand" aria-label="ZWISCHENWELTEN Startseite">
+          <img src="/ZW_logo.png" alt="ZWISCHENWELTEN">
+        </a>
+
+        <nav aria-label="Hauptnavigation">
+          <ul class="nav-links">
+            <li><a href="/aktuelles" class="is-current" aria-current="page">Aktuelles</a></li>
+            <li><a href="/ueber-uns">Über uns</a></li>
+            <li><a href="/journalistennetzwerk">Journalistennetzwerk</a></li>
+            <li><a href="/buergerredaktion">Bürgerredaktion</a></li>
+            <li><a href="/mitmachen">Mach mit!</a></li>
+            <li><a href="/medienpreis">Medienpreis</a></li>
+          </ul>
+        </nav>
+
+        <div class="nav-actions">
+          <a href="/kontakt" class="pill-btn">Kontakt</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+
+      <!-- ARTICLE HERO -->
+      <article aria-labelledby="article-title"{dir_attr}>
+        <section class="article-hero">
+          <div class="container">
+            <div class="article-meta">{tag_html}
+              <span class="article-meta-line">
+                <time datetime="{iso_date}">{date_label}</time>
+                <span class="sep" aria-hidden="true">·</span>
+                {author}
+                <span class="sep" aria-hidden="true">·</span>
+                {lang_label}
+              </span>
+            </div>
+            <h1 class="article-title" id="article-title">{title_html}</h1>{subtitle_html}
+          </div>
+        </section>
+
+        <!-- COVER -->
+        <section class="article-cover">
+          <div class="container">
+            <figure>
+              <img src="{cover}" alt="{alt}"{dims}>{caption_html}
+            </figure>
+          </div>
+        </section>
+
+        <!-- BODY -->
+        <section class="article-body">
+          <div class="container">
+            <div class="article-card">
+              <div class="article-prose">
+{body}
+
+                <div class="article-back">
+                  <p class="article-author">{by}: <strong>{author}</strong> · {published_line}</p>
+                  <a href="/aktuelles" class="back-link">← {back}</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </article>
+
+    </main>
+
+    <footer class="footer" aria-label="Fußbereich">
+      <div class="container">
+        <div class="partners" aria-label="Projektpartner">
+          <span class="partners-label">Unterstützt durch</span>
+          <div class="partners-logos">
+            <a href="https://www.berlin.de/" class="partner-logo" target="_blank" rel="noopener" aria-label="Land Berlin">
+              <img src="/berlin_logo.png" alt="Land Berlin">
+            </a>
+            <a href="https://www.degewo.de/" class="partner-logo" target="_blank" rel="noopener" aria-label="degewo">
+              <img src="/Degewo_Logo.svg.png" alt="degewo">
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-inner">
+          <div>ZWISCHENWELTEN · Berlin · Bürgerredaktion · Journalistennetzwerk · Medienwettbewerb 2026</div>
+          <div class="footer-links">
+            <a href="/ueber-uns">Über uns</a>
+            <a href="/kontakt">Kontakt</a>
+            <a href="/impressum">Impressum</a>
+            <a href="/datenschutz">Datenschutz</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+  <script src="/assets/consent.js" defer></script>
+</body>
+</html>
+"""
+
+CARD = """            <a class="post-card" href="/aktuelles/{slug}" data-lang="{lang}" hreflang="{lang}" lang="{lang}">
+              <div class="post-thumb">
+                <img src="{cover}" alt="{alt}" loading="lazy"{dims}>
+                <span class="post-lang-badge"><span class="dot" aria-hidden="true"></span>{lang_label}</span>
+              </div>
+              <div class="post-info">
+                <p class="post-meta">
+                  <time datetime="{iso_date}">{date_label}</time>
+                  <span class="sep" aria-hidden="true">·</span>
+                  <span>{author}</span>
+                </p>
+                <h2 class="post-title">{title_plain}</h2>
+                <p class="post-excerpt">{excerpt}</p>
+                <span class="post-cta">{read_more} →</span>
+              </div>
+            </a>
+"""
+
+
+def strip_tags(s):
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", s)).strip()
+
+
+def teaser(subtitle, body_html, limit=260):
+    first_p = re.search(r"<p>(.*?)</p>", body_html, re.S)
+    text = strip_tags(first_p.group(1)) if first_p else ""
+    lead = f"{subtitle}: {text}" if subtitle else text
+    if len(lead) <= limit:
+        return lead
+    cut = lead[:limit].rsplit(" ", 1)[0]
+    return cut.rstrip(" ,;:—–-") + " …"
+
+
+def slugify(title):
+    s = fold(title)
+    return re.sub(r"\s+", "-", s)[:60].strip("-") or "post"
+
+
+# --------------------------------------------------------------------------
+# Overview page updates
+# --------------------------------------------------------------------------
+def add_chip(index_html, lang):
+    """Make sure the filter offers this language."""
+    if f'data-lang="{lang}"' in index_html.split("</div>", 1)[0] or \
+       re.search(rf'class="lang-chip" data-lang="{lang}"', index_html):
+        return index_html, False
+    chip = (f'            <button type="button" class="lang-chip" data-lang="{lang}" '
+            f'aria-pressed="false">{LANGS[lang]["label"]}</button>\n')
+    # insert in CHIP_ORDER position
+    later = [l for l in CHIP_ORDER[CHIP_ORDER.index(lang) + 1:]
+             if re.search(rf'class="lang-chip" data-lang="{l}"', index_html)] if lang in CHIP_ORDER else []
+    if later:
+        anchor = re.search(rf'^.*class="lang-chip" data-lang="{later[0]}".*$\n',
+                           index_html, re.M)
+        index_html = index_html[:anchor.start()] + chip + index_html[anchor.start():]
+    else:
+        last = list(re.finditer(r'^.*class="lang-chip".*$\n', index_html, re.M))[-1]
+        index_html = index_html[:last.end()] + chip + index_html[last.end():]
+    # keep the filter's accepted-language list in sync
+    m = re.search(r"var langs = \[(.*?)\];", index_html)
+    if m and f"'{lang}'" not in m.group(1):
+        index_html = index_html.replace(
+            m.group(0), f"var langs = [{m.group(1)}, '{lang}'];")
+    return index_html, True
+
+
+def add_card(index_html, card):
+    anchor = '<div class="posts-grid" id="posts-grid">\n'
+    if anchor not in index_html:
+        die("Could not find the post grid in aktuelles/index.html.")
+    return index_html.replace(anchor, anchor + "\n" + card, 1)
+
+
+# --------------------------------------------------------------------------
+def main():
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--md", required=True, help="manuscript (.md)")
+    ap.add_argument("--image", required=True, help="cover image (jpg/png)")
+    ap.add_argument("--lang", required=True, choices=sorted(LANGS), help="language of the manuscript")
+    ap.add_argument("--date", required=True, help="publication date, YYYY-MM-DD")
+    ap.add_argument("--author", help="author name; default: byline found in the manuscript")
+    ap.add_argument("--slug", help="URL slug; default: derived from the title")
+    ap.add_argument("--tag", help="small label above the headline (e.g. Medienpreis)")
+    ap.add_argument("--highlight", help="phrase in the title to mark with the accent colour")
+    ap.add_argument("--alt", help="alt text for the cover image; default: the title")
+    ap.add_argument("--caption", help="caption under the cover image")
+    ap.add_argument("--subtitle-from", default="auto", choices=["auto", "italic", "heading", "none"])
+    ap.add_argument("--new-author", action="store_true",
+                    help="register the author as a new person instead of matching an existing one")
+    ap.add_argument("--dry-run", action="store_true", help="report only, write nothing")
+    args = ap.parse_args()
+
+    for p in (args.md, args.image):
+        if not os.path.exists(p):
+            die(f"File not found: {p}")
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", args.date):
+        die("--date must look like 2026-07-20.")
+
+    lang = args.lang
+    cfg = LANGS[lang]
+    raw_md = open(args.md, encoding="utf-8").read()
+
+    # ---- author -----------------------------------------------------------
+    registry = load_authors()
+    name = args.author or find_author_in_md(raw_md)
+    if not name:
+        die("No author found. Add a byline like 'Author: Name' to the manuscript, "
+            "or pass --author \"Name\".")
+    entry, score = match_author(name, registry)
+    if entry and not args.new_author:
+        author = entry.get("names", {}).get(lang) or entry["canonical"]
+        info(f"Author: '{name}' → known author {entry['canonical']} "
+             f"(match {score:.0%}), using '{author}' for {lang}.")
+    else:
+        author = name
+        if not args.new_author:
+            die(f"'{name}' does not match any known author (closest {score:.0%}).\n"
+                f"  Re-run with --new-author to register them, or pass --author with "
+                f"the spelling used in assets/blog/authors.json.")
+        info(f"Author: registering new author '{name}'.")
+        registry["authors"].append({
+            "id": slugify(name), "canonical": name, "role": "",
+            "names": {lang: name}, "aliases": [],
+        })
+
+    # ---- manuscript -------------------------------------------------------
+    title, subtitle, body_md = parse_md(args.md, lang, args.subtitle_from)
+    body = md_to_blocks(body_md, lang)
+    info(f"Title: {title}")
+    info(f"Subtitle: {subtitle or '(none)'}")
+
+    slug = args.slug or slugify(title)
+    page_path = os.path.join(POSTS_DIR, slug + ".html")
+    if os.path.exists(page_path) and not args.dry_run:
+        die(f"{page_path} already exists. Pass a different --slug.")
+
+    # ---- cover ------------------------------------------------------------
+    ext = os.path.splitext(args.image)[1].lower() or ".jpg"
+    cover_rel = f"/assets/blog/{slug}-cover{ext}"
+    w, h = image_size(args.image)
+    dims = f' width="{w}" height="{h}"' if w and h else ""
+
+    # ---- assemble ---------------------------------------------------------
+    y, mo, d = (int(x) for x in args.date.split("-"))
+    date_label = cfg["date"].format(d=d, m=MONTHS[lang][mo - 1], y=y)
+    title_html = esc(title)
+    if args.highlight:
+        if args.highlight not in title:
+            die(f"--highlight {args.highlight!r} does not occur in the title.")
+        title_html = esc(title).replace(esc(args.highlight),
+                                        f"<em>{esc(args.highlight)}</em>", 1)
+    description = strip_tags(teaser(subtitle, body, 155))
+    published_line = (f"{cfg['published']} {date_label}" if lang != "tr"
+                      else f"{date_label} {cfg['published']}")
+
+    page = PAGE.format(
+        lang=lang, locale=cfg["locale"], site=SITE,
+        title_plain=esc(title), title_html=title_html,
+        subtitle_html=f'\n            <p class="article-subtitle">{esc(subtitle)}</p>' if subtitle else "",
+        description=esc(description).replace('"', "&quot;"),
+        tag_html=f'\n              <span class="article-tag">{esc(args.tag)}</span>' if args.tag else "",
+        iso_date=args.date, date_label=date_label, author=esc(author),
+        lang_label=cfg["label"], cover=cover_rel, dims=dims,
+        alt=esc(args.alt or title).replace('"', "&quot;"),
+        caption_html=f'\n              <figcaption>{esc(args.caption)}</figcaption>' if args.caption else "",
+        body=body, by=cfg["by"], published_line=published_line, back=cfg["back"],
+        dir_attr=' dir="rtl"' if cfg["rtl"] else "",
+    )
+
+    # ---- fidelity gate ----------------------------------------------------
+    a, b, diffs = check_fidelity(args.md, page)
+    if diffs:
+        print("\n✗ The generated page does not match the manuscript word for word:")
+        for tag, i1, i2, j1, j2 in diffs[:20]:
+            print(f"    [{tag}] md={' '.join(a[i1:i2])!r} page={' '.join(b[j1:j2])!r}")
+        die("Nothing was written. Fix the converter or the manuscript and retry.")
+    info(f"Fidelity check: {len(a)} words, identical to the manuscript. ✓")
+
+    card = CARD.format(
+        slug=slug, lang=lang, cover=cover_rel, dims=dims,
+        alt=esc(args.alt or title).replace('"', "&quot;"),
+        lang_label=cfg["label"], iso_date=args.date, date_label=date_label,
+        author=esc(author), title_plain=esc(title),
+        excerpt=esc(teaser(subtitle, body)), read_more=cfg["read_more"],
+    )
+
+    if args.dry_run:
+        print(f"\n[dry run] would write {page_path}")
+        print(f"[dry run] would copy  {args.image} → {IMG_DIR}/{slug}-cover{ext}")
+        print(f"[dry run] would add a {cfg['label']} card to aktuelles/index.html")
+        return
+
+    # ---- write ------------------------------------------------------------
+    with open(page_path, "w", encoding="utf-8") as fh:
+        fh.write(page)
+    shutil.copyfile(args.image, os.path.join(IMG_DIR, f"{slug}-cover{ext}"))
+
+    index_html = open(INDEX, encoding="utf-8").read()
+    index_html, added = add_chip(index_html, lang)
+    index_html = add_card(index_html, card)
+    with open(INDEX, "w", encoding="utf-8") as fh:
+        fh.write(index_html)
+
+    if args.new_author:
+        with open(AUTHORS, "w", encoding="utf-8") as fh:
+            json.dump(registry, fh, ensure_ascii=False, indent=2)
+            fh.write("\n")
+
+    print(f"\n✓ Published /aktuelles/{slug}")
+    info(f"page   aktuelles/{slug}.html")
+    info(f"cover  assets/blog/{slug}-cover{ext}")
+    info(f"card   added to aktuelles/index.html" + (f" (+ {cfg['label']} filter chip)" if added else ""))
+    print(f"\nPreview:  python3 dev-server.py  →  http://localhost:8000/aktuelles/{slug}\n")
+
+
+if __name__ == "__main__":
+    main()

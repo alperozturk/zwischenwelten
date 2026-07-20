@@ -1,0 +1,45 @@
+{
+  "_comment": "Author registry for the blog. publish_post.py matches names found in a manuscript against these entries (diacritics- and Cyrillic-aware) so the same person never gets two records. Add a new entry only when no existing author matches.",
+  "authors": [
+    {
+      "id": "suleyman-bag",
+      "canonical": "Süleyman Bağ",
+      "role": "Projektleiter Zwischenwelten",
+      "names": {
+        "de": "Süleyman Bağ",
+        "en": "Süleyman Bağ",
+        "tr": "Süleyman Bağ",
+        "ru": "Сулейман Баг",
+        "uk": "Сулейман Баг",
+        "ar": "سليمان باغ",
+        "ku": "Süleyman Bağ"
+      },
+      "aliases": ["Suleyman Bag", "Süleyman Bag", "Suleyman Bağ", "S. Bağ", "Сулейман Баг"]
+    },
+    {
+      "id": "dominique-hensel",
+      "canonical": "Dominique Hensel",
+      "role": "Chefredakteurin Brunnenmagazin",
+      "names": {
+        "de": "Dominique Hensel",
+        "en": "Dominique Hensel",
+        "tr": "Dominique Hensel",
+        "ru": "Доминик Хензель",
+        "uk": "Домінік Хензель"
+      },
+      "aliases": ["Доминик Хензель", "Домінік Хензель"]
+    },
+    {
+      "id": "andrei-schnell",
+      "canonical": "Andrei Schnell",
+      "role": "Journalist",
+      "names": {
+        "de": "Andrei Schnell",
+        "en": "Andrei Schnell",
+        "ru": "Андрей Шнель",
+        "uk": "Андрей Шнель"
+      },
+      "aliases": ["Andrei Schnel", "Андрей Шнель"]
+    }
+  ]
+}
